@@ -1,0 +1,3 @@
+D:/mipt_tp_screamqueens/stats/cmake-build-debug/CMakeFiles/stats.dir
+D:/mipt_tp_screamqueens/stats/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/mipt_tp_screamqueens/stats/cmake-build-debug/CMakeFiles/rebuild_cache.dir
