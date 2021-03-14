@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/mipt_tp_screamqueens/stats/library.cpp" "D:/mipt_tp_screamqueens/stats/cmake-build-debug/CMakeFiles/stats.dir/library.cpp.obj"
+  "D:/mipt_tp_screamqueens/stats/stats.cpp" "D:/mipt_tp_screamqueens/stats/cmake-build-debug/CMakeFiles/stats.dir/stats.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

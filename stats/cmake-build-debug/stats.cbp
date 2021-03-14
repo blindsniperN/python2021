@@ -80,10 +80,10 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/mipt_tp_screamqueens/stats/library.cpp">
+		<Unit filename="D:/mipt_tp_screamqueens/stats/stats.cpp">
 			<Option target="stats"/>
 		</Unit>
-		<Unit filename="D:/mipt_tp_screamqueens/stats/library.h">
+		<Unit filename="D:/mipt_tp_screamqueens/stats/stats.h">
 			<Option target="stats"/>
 		</Unit>
 		<Unit filename="D:/mipt_tp_screamqueens/stats/CMakeLists.txt">

@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/stats.dir/library.cpp.obj"
+  "CMakeFiles/stats.dir/stats.cpp.obj"
   "libstats.a"
   "libstats.pdb"
 )

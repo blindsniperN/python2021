@@ -76,27 +76,27 @@ include CMakeFiles/stats.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/stats.dir/flags.make
 
-CMakeFiles/stats.dir/library.cpp.obj: CMakeFiles/stats.dir/flags.make
-CMakeFiles/stats.dir/library.cpp.obj: ../library.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\mipt_tp_screamqueens\stats\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/stats.dir/library.cpp.obj"
-	C:\MinGW64\mingw64\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\stats.dir\library.cpp.obj -c D:\mipt_tp_screamqueens\stats\library.cpp
+CMakeFiles/stats.dir/stats.cpp.obj: CMakeFiles/stats.dir/flags.make
+CMakeFiles/stats.dir/stats.cpp.obj: ../stats.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\mipt_tp_screamqueens\stats\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/stats.dir/stats.cpp.obj"
+	C:\MinGW64\mingw64\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\stats.dir\stats.cpp.obj -c D:\mipt_tp_screamqueens\stats\stats.cpp
 
-CMakeFiles/stats.dir/library.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/stats.dir/library.cpp.i"
-	C:\MinGW64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\mipt_tp_screamqueens\stats\library.cpp > CMakeFiles\stats.dir\library.cpp.i
+CMakeFiles/stats.dir/stats.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/stats.dir/stats.cpp.i"
+	C:\MinGW64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\mipt_tp_screamqueens\stats\stats.cpp > CMakeFiles\stats.dir\stats.cpp.i
 
-CMakeFiles/stats.dir/library.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/stats.dir/library.cpp.s"
-	C:\MinGW64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\mipt_tp_screamqueens\stats\library.cpp -o CMakeFiles\stats.dir\library.cpp.s
+CMakeFiles/stats.dir/stats.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/stats.dir/stats.cpp.s"
+	C:\MinGW64\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\mipt_tp_screamqueens\stats\stats.cpp -o CMakeFiles\stats.dir\stats.cpp.s
 
 # Object files for target stats
 stats_OBJECTS = \
-"CMakeFiles/stats.dir/library.cpp.obj"
+"CMakeFiles/stats.dir/stats.cpp.obj"
 
 # External object files for target stats
 stats_EXTERNAL_OBJECTS =
 
-libstats.a: CMakeFiles/stats.dir/library.cpp.obj
+libstats.a: CMakeFiles/stats.dir/stats.cpp.obj
 libstats.a: CMakeFiles/stats.dir/build.make
 libstats.a: CMakeFiles/stats.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\mipt_tp_screamqueens\stats\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libstats.a"

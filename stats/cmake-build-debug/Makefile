@@ -142,32 +142,32 @@ stats/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/build
 .PHONY : stats/fast
 
-library.obj: library.cpp.obj
+stats.obj: stats.cpp.obj
 
-.PHONY : library.obj
+.PHONY : stats.obj
 
 # target to build an object file
-library.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/library.cpp.obj
-.PHONY : library.cpp.obj
+stats.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/stats.cpp.obj
+.PHONY : stats.cpp.obj
 
-library.i: library.cpp.i
+stats.i: stats.cpp.i
 
-.PHONY : library.i
+.PHONY : stats.i
 
 # target to preprocess a source file
-library.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/library.cpp.i
-.PHONY : library.cpp.i
+stats.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/stats.cpp.i
+.PHONY : stats.cpp.i
 
-library.s: library.cpp.s
+stats.s: stats.cpp.s
 
-.PHONY : library.s
+.PHONY : stats.s
 
 # target to generate assembly for a file
-library.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/library.cpp.s
-.PHONY : library.cpp.s
+stats.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\stats.dir\build.make CMakeFiles/stats.dir/stats.cpp.s
+.PHONY : stats.cpp.s
 
 # Help Target
 help:
@@ -178,9 +178,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... stats
-	@echo ... library.obj
-	@echo ... library.i
-	@echo ... library.s
+	@echo ... stats.obj
+	@echo ... stats.i
+	@echo ... stats.s
 .PHONY : help
 
 
