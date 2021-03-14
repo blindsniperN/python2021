@@ -1,0 +1,2 @@
+C:\MinGW64\mingw64\bin\ar.exe qc libstats.a  CMakeFiles/stats.dir/stats.cpp.obj
+C:\MinGW64\mingw64\bin\ranlib.exe libstats.a
