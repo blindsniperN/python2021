@@ -1,29 +1,30 @@
-//
-// Created by Savichev Dmitrii on 14.03.2021.
-//
+#pragma once
+#include <vector>
+#include <string>
+#include "../stats/stats.h"
+#include "person.h"
 
-#ifndef PERSON_FACTORIES_H
-#define PERSON_FACTORIES_H
-#include "person.cpp"
-#ifndef STATS_H
-    #include "../stats/stats.cpp"
-#endif
-
-class AbstractFactory {
+class Factory {
 public:
-    virtual Person createPerson(const std::string& name, const stats_library::ParameterList& parameters, const stats_library::SkillList& skills) const = 0;
+    Factory(const std::string& name,
+                    const stats_library::ParameterList& parameters,
+                    const stats_library::SkillList& skills,
+                    const std::vector<int>& att = std::vector<int> (6, 1),
+                    const std::vector<int>& def = std::vector<int> (2, 1),
+                    const std::vector<int>& tool = std::vector<int> (4, 1)):
+                    name_(name), parameters_(parameters), skills_(skills), attack_(att), defense_(def), tools_(tool) {}
+    Person createPerson() const {
+        return Person(name_, parameters_, skills_, attack_, defense_, tools_);
+    };
+
+protected:
+    std::string name_;
+    stats_library::ParameterList parameters_;
+    stats_library::SkillList skills_;
+    std::vector<int> attack_;
+    std::vector<int> defense_;
+    std::vector<int> tools_;
 };
 
-class ProtagonistFactory: public AbstractFactory {
-    Person createPerson(const std::string& name, const stats_library::ParameterList& parameters, const stats_library::SkillList& skills) const override {
-        return Protagonist(name, parameters, skills);
-    }
-};
 
-class AntagonistFactory: public AbstractFactory {
-    Person createPerson(const std::string& name, const stats_library::ParameterList& parameters, const stats_library::SkillList& skills) const override {
-        return Antagonist(name, parameters, skills);
-    }
-};
 
-#endif //PERSON_FACTORIES_H
