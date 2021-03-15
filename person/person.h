@@ -13,13 +13,24 @@ namespace pers_class
     ~DiceRoll() = default;
   };
 
+  class PrefixVector {
+   private:
+    std::vector<int> a;
+   public:
+    int Sum() { return a[a.size() - 1]; }
+    int Index(int roll) { return lower_bound(a.begin(), a.end(), roll)
+                                 - a.begin(); }
+    PrefixVector(const std::vector<int>&);
+    ~PrefixVector() = default;
+  };
+
   class Person {
    protected:
     stats_library::SkillList skills_;
     stats_library::ParameterList parameters_;
-    std::vector<int> attack_probability_;
-    std::vector<int> defense_probability_;
-    std::vector<int> tool_probability_;
+    PrefixVector att_prob_; // вероятности атак
+    PrefixVector def_prob_; // вероятности защит
+    PrefixVector tool_prob_; // вероятности рычагов
    public:
     std::string name_;
     // атаки
@@ -37,9 +48,9 @@ namespace pers_class
     short Hint(); // намёк
     short Bribe(); // подкуп
     // атака для ИИ, для игрока - случайная атака
-    int CustomAttack();
-    int CustomDefense();
-    int CustomTool();
+    int RandomAttack();
+    int RandomDefense();
+    int RandomTool();
     // конструктор / деструктор
     Person(const std::string&, const stats_library::ParameterList&,
            const stats_library::SkillList&, const std::vector<int>&,
