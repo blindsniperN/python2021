@@ -1,5 +1,6 @@
 #ifndef STATS_H
 #define STATS_H
+
 namespace stats_library {
 
   class Parameter { // отвечает за один параметр из четырёх
