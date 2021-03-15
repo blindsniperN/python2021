@@ -94,9 +94,9 @@ namespace pers_class
 
   Person::Person(const std::string& s, const stats_library::ParameterList& p,
          const stats_library::SkillList& skill,
-         const std::vector<int>& att = std::vector<int> (6, 0),
-         const std::vector<int>& def = std::vector<int> (2, 0),
-         const std::vector<int>& tool = std::vector<int> (4, 0)):
+         const std::vector<int>& att = std::vector<int> (6, 1),
+         const std::vector<int>& def = std::vector<int> (2, 1),
+         const std::vector<int>& tool = std::vector<int> (4, 1)):
          name_(s), parameters_(p), skills_(skill) {
     attack_probability_ = std::vector<int> (6, 0);
     defense_probability_ = std::vector<int> (2, 0);
