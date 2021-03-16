@@ -32,7 +32,8 @@ namespace stats_library {
     short value_ = 0; // значение от 0 до 10, распределение на старте игры
     short modifier_ = 0; // кумулятивный модификатор от атак
     Parameter& parameter_; // параметр, от которого зависит навык
-
+    
+    short Roll() { return value_ + modifier_ + parameter_.value_; }
     Skill(Parameter& p): parameter_(p) {}
     Skill(Parameter& p, short x): parameter_(p), value_(x) {}
     ~Skill() = default;
