@@ -1,4 +1,5 @@
-#include "gtest.h"
+#pragma once
+#include "gtest/gtest.h"
 #include "../person/person.h"
 #include "../person/factories.h"
 #include <vector>
@@ -21,8 +22,8 @@ TEST(Person_Tests, Factory_Test)
         std::vector<int> tools(4, 1);
         Person person = personFactory.createPerson("Test", parameterList, skillList, attack, defense, tools);
         // what do i do to check????????
-    } catch {
-        FAIL()
+    } catch (...) {
+        FAIL();
     }
 }
 
@@ -93,7 +94,7 @@ TEST(Person_Tests, Roll_Tests) {
         ASSERT_LE(person.Bribe(), 30);
         ASSERT_GE(person.Bribe(), 0);
 
-    } catch {
+    } catch (...) {
         FAIL();
     }
 }
@@ -103,8 +104,13 @@ TEST(Person_Tests, PrefixVector_Tests) {
         PrefixVector prefixVector = attack;
         ASSERT_EQ(prefixVector.Sum(), 6);
         ASSERT_EQ(prefixVector.Index(2), 3);
-    } catch {
+    } catch (...) {
         FAIL();
     }
 }
 
+int main(int argc, char *argv[])
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
