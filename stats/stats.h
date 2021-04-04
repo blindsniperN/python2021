@@ -63,3 +63,4 @@ namespace stats_library {
 }
 
 #endif //STATS_H
+
