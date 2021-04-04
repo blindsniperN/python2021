@@ -40,9 +40,9 @@ namespace teams
 
     void Team::add(Person person) {
         if (size_ < max_size_) {
-            members_.push_back(person);
+            auto it = members_.begin() + rand() % size_; // Todo мб поставить другой рандом
+            members_.insert(it, person);
             ++size_;
-            shuffle();
         } else {
             throw TooManyPeopleException();
         }
