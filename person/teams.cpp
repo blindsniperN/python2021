@@ -13,7 +13,7 @@ namespace teams
     class TooManyPeopleException: public std::exception {}; // исключение бросаемое при переполнении команды
     class PersonNotFound: public std::exception {};
 
-    Team::Team(const std::vector<Person>& people): members_(people), size_(people.size()) {
+    Team::Team(const std::vector<Person>& people, int max_size): members_(people), size_(people.size()), max_size_(max_size) {
         if (members_.size() > max_size_) {
             members_.resize(max_size_);
             size_ = max_size_;
@@ -28,10 +28,10 @@ namespace teams
         if (size_ < max_size_) {
             add(person);
             createTeam(args...);
-        } else {
-            throw TooManyPeopleException();
         }
     }
+
+    void Team::createTeam() { return; }
 
     void Team::shuffle() {
         auto rng = std::default_random_engine {};

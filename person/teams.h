@@ -10,11 +10,11 @@ namespace teams
 
     class Team {
     public:
-        Team(const std::vector<Person>&);
+        Team(const std::vector<Person>&, int);
         void add(Person);
 
         template<typename... Args>
-        Team(Args... args) { createTeam(args...); }
+        Team(Args... args, int max_size): max_size_(max_size) { createTeam(args...); }
         Person get();
 //        void apply(object)
         Person find(const std::string&);
@@ -26,6 +26,7 @@ namespace teams
 
         template<typename... Args>
         void createTeam(Person, Args...);
+        void createTeam();
         void shuffle();
     };
 
