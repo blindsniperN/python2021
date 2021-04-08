@@ -9,6 +9,13 @@ namespace stats_library {
     will_.value_ = arr[3];
   }
 
+  std::string ParameterList::toString() const {
+      std::string answer;
+      answer = std::to_string(charm_.value_) + std::to_string(cunning_.value_)
+              + std::to_string(intelligence_.value_) + std::to_string(will_.value_);
+      return answer;
+  }
+
   void ParameterList::UpdateMaxDetermination() {
     max_determination_.value_ = (will_.value_ + intelligence_.value_)*5/2;
   }
@@ -29,5 +36,12 @@ namespace stats_library {
           seduction_(p.charm_, arr[7]),
           intimidation_(p.will_, arr[8]),
           persuasion_resist_(p.will_, arr[9]) {}
-
+  std::string SkillList::toString() const {
+      std::string answer;
+      answer = std::to_string(etiquette_.value_) + std::to_string(people_understand_.value_) +
+              std::to_string(deception_.value_) + std::to_string(gambling_.value_) + std::to_string(leadership_.value_) +
+              std::to_string(charisma_.value_) + std::to_string(persuasion_.value_) + std::to_string(seduction_.value_) +
+              std::to_string(intimidation_.value_) + std::to_string(persuasion_resist_.value_);
+      return answer;
+  }
 }

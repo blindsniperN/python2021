@@ -22,15 +22,20 @@ namespace pers_class
                                  - a.begin(); }
     PrefixVector(const std::vector<int>&);
     ~PrefixVector() = default;
+    std::string toString() const;
   };
 
   class Person {
    protected:
-    stats_library::SkillList skills_;
     stats_library::ParameterList parameters_;
+    stats_library::SkillList skills_;
     PrefixVector att_prob_; // вероятности атак
     PrefixVector def_prob_; // вероятности защит
     PrefixVector tool_prob_; // вероятности рычагов
+
+    static const int att_count_ = 6;
+    static const int def_count_ = 2;
+    static const int tool_count_ = 4;
    public:
     std::string name_;
     // атаки
@@ -56,6 +61,10 @@ namespace pers_class
            const stats_library::SkillList&, const std::vector<int>&,
            const std::vector<int>&, const std::vector<int>&);
     ~Person() = default;
+
+    // для базы данных
+    Person(std::string&);
+    std::string toString() const;
   };
 
 }

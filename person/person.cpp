@@ -6,6 +6,7 @@
 
 namespace pers_class
 {
+    using namespace stats_library;
   // вспомогательный класс префиксных векторов
 
   PrefixVector::PrefixVector(const std::vector<int>& ref) {
@@ -15,6 +16,14 @@ namespace pers_class
       a[i] = a[i - 1] + ref[i];
   }
 
+  std::string PrefixVector::toString() const {
+      std::string answer;
+      answer += std::to_string(a[0]);
+      for (int i = 1; i < a.size(); ++i) {
+          answer += "; " + std::to_string(a[i] - a[i - 1]);
+      }
+      return answer;
+  }
   // атаки
 
   DiceRoll Person::Seduce() {
@@ -108,5 +117,54 @@ namespace pers_class
 
   int Person::RandomTool() {
     return tool_prob_.Index(rand() % tool_prob_.Sum());
+  }
+
+    std::string& popFirst(std::string& data) {
+        std::string answer = data.substr(0, data.find(';'));
+        data = data.substr(data.find(';'), data.size() - 1);
+        return answer;
+    }
+
+  Person::Person(std::string data) {
+      name_ = popFirst(data);
+      short* parameters = new short[ParameterList::parameter_count_];
+      for (int i = 0; i < ParameterList::parameter_count_; ++i) {
+          parameters[i] = std::stoi(popFirst(data));
+      }
+      parameters_ = ParameterList(parameters);
+      short* skills = new short[SkillList::skill_count_];
+      for (int i = 0; i < SkillList::skill_count_; ++i) {
+          parameters[i] = std::stoi(popFirst(data));
+      }
+      skills_ = SkillList(parameters_, skills);
+
+      std::vector<int> att;
+      for (int i = 0; i < att_count_; ++i) {
+          att.push_back(std::stoi(popFirst(data)));
+      }
+      att_prob_ = PrefixVector(att);
+
+      std::vector<int> def;
+      for (int i = 0; i < def_count_; ++i) {
+          def.push_back(std::stoi(popFirst(data)));
+      }
+      def_prob_ = PrefixVector(def);
+
+      std::vector<int> tools;
+      for (int i = 0; i < tool_count_; ++i) {
+          tools.push_back(std::stoi(popFirst(data)));
+      }
+      tool_prob_ = PrefixVector(tools);
+  }
+
+  std::string Person::toString() const {
+      std::string answer;
+      answer += name_ + "; ";
+      answer += parameters_.toString() + "; ";
+      answer += skills_.toString() + "; ";
+      answer += att_prob_.toString() + "; ";
+      answer += def_prob_.toString() + "; ";
+      answer += tool_prob_.toString() + "; ";
+      return answer;
   }
 }
