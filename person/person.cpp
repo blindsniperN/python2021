@@ -19,35 +19,37 @@ namespace pers_class
 
   DiceRoll Person::Seduce() {
     DiceRoll ans;
-    ans.to_hit = 1 + rand() % 10 + skills_.seduction_.Roll();
+    ans.to_hit = 1 + rand() % 10 + skills_.seduction_.Roll() + cd_;
     ans.dmg = 1 + rand() % 6 + parameters_.charm_.value_;
     return ans;
   }
 
   DiceRoll Person::MakeAnArgument() {
     DiceRoll ans;
-    ans.to_hit = 1 + rand() % 10 + skills_.leadership_.Roll();
-    ans.dmg = 1 + rand() % 10 + parameters_.charm_.value_;
+    ans.to_hit = 1 + rand() % 10 + skills_.leadership_.Roll() + cd_;
+    ans.dmg = 1 + rand() % 8 + parameters_.charm_.value_;
     return ans;
   }
 
-  DiceRoll Person::Intimidate() {
+  DiceRoll Person::Convince() {
     DiceRoll ans;
-    ans.to_hit =  1 + rand() % 10 + skills_.intimidation_.Roll();
-    ans.dmg = 1 + rand() % 10 + parameters_.will_.value_;
+    ans.to_hit = 1 + rand() % 10 + skills_.persuasion_.Roll() + cd_;
+    ans.dmg = (1 + rand() % 6) / 2 + parameters_.charm_.value_;
     return ans;
   }
 
   DiceRoll Person::Deceive() {
     DiceRoll ans;
-    ans.to_hit =  1 + rand() % 10 + skills_.deception_.Roll();
-    ans.dmg = 1 + rand() % 6 + parameters_.intelligence_.value_;
+    ans.to_hit = std::max(1 + rand() % 10 +
+            skills_.deception_.Roll() - deceive_to_hit_ + cd_, 0);
+    ans.dmg = 1 + rand() % 12 + parameters_.intelligence_.value_;
     return ans;
   }
 
   DiceRoll Person::Mock() {
     DiceRoll ans;
-    ans.to_hit =  1 + rand() % 10 + skills_.etiquette_.Roll();
+    ans.to_hit = std::max(1 + rand() % 10 +
+                           skills_.etiquette_.Roll() - mock_to_hit_ + cd_, 0);
     ans.dmg = 1 + rand() % 6 + parameters_.will_.value_;
     return ans;
   }
@@ -88,10 +90,10 @@ namespace pers_class
 
   // конструктор
 
-  Person::Person(const std::string& s, const stats_library::ParameterList& p,
+  PersonContainer::PersonContainer(const std::string& s, const stats_library::ParameterList& p,
          const stats_library::SkillList& skill,
          const std::vector<int>& att = std::vector<int> (6, 1),
-         const std::vector<int>& def = std::vector<int> (2, 1),
+         const std::vector<int>& def = std::vector<int> (3, 1),
          const std::vector<int>& tool = std::vector<int> (4, 1)):
          name_(s), parameters_(p), skills_(skill), att_prob_(att),
          def_prob_(def), tool_prob_(tool) { }
@@ -109,4 +111,48 @@ namespace pers_class
   int Person::RandomTool() {
     return tool_prob_.Index(rand() % tool_prob_.Sum());
   }
+
+  // применение эффектов
+
+  void Person::applySeduce(short dmg) { // соблазнить
+    substractHealth(health_, emp_dmg_ + dmg + seduce_dmg_);
+    seduce_dmg_ += 2;
+  }
+
+  void Person::applyArgument(short dmg) { // привести довод
+    substractHealth(health_, emp_dmg_ + dmg);
+    emp_dmg_ += 1;
+  }
+
+  void Person::applyConvinceDefenser(short dmg) { // убеждение по защищаемуся
+    substractHealth(health_, emp_dmg_ + dmg);
+  }
+  void Person::applyConvinceAttacker(short dmg) { health_ += dmg; }// убеждение по атакующему
+
+  void Person::applyDeceiveDefenser(short dmg) {
+    substractHealth(health_, dmg);
+  } // обмануть защищающийся
+
+  void Person::applyDeceiveAttacker() { deceive_to_hit_ += 2; cd_ = 0;} // обмануть атакующий
+
+  void Person::applyMockDefenser(short dmg) { substractHealth(health_, dmg); } // насмехнуться по защищаемуся
+  void Person::applyMockAttacker(short dmg) {
+    health_ += dmg;
+    mock_to_hit_ += 1;
+    cd_ = 0;
+  } // насмехнуться по атакующему
+  // защиты
+  void Person::applyIgnore(short dmg) { // игнорировать
+    substractHealth(health_, dmg);
+  }
+  void Person::applyChangeTheme(short dmg) { // смена темы
+    substractHealth(health_, dmg);
+  }
+  // рычаги
+  void Person::applyLove() { cd_ = 3; }// любовь
+  void Person::applyResearch() { health_ += parameters_.intelligence_.value_; }
+  // увеличивает хп
+  /*
+  void Person::applyHint(); // намёк
+  void Person::applyBribe(); // подкуп */
 }
