@@ -32,3 +32,4 @@ namespace stats_library {
           persuasion_resist_(p.will_, arr[9]) {}
 
 }
+

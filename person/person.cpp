@@ -172,3 +172,4 @@ namespace pers_class
   void Person::applyHint(); // намёк
   void Person::applyBribe(); // подкуп */
 }
+
