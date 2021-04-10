@@ -1,6 +1,7 @@
 #pragma once
 #include "../stats/stats.cpp"
 #include <string>
+#include "game_mechanics.h"
 #include <vector>
 
 namespace pers_class
@@ -47,7 +48,7 @@ namespace pers_class
     short emp_dmg_ = 0; // кумулятивный эффект на кумулятивные атаки
     short deceive_to_hit_ = 0;
     short mock_to_hit_ = 0;
-    short cd_ = 0;
+    short love_modifier_ = 0;
    public:
     // атаки
     DiceRoll Seduce(); // соблазнить
@@ -71,7 +72,7 @@ namespace pers_class
     // конструктор
     Person(const std::string& s, const stats_library::ParameterList& p,
            const stats_library::SkillList& skill,
-           const std::vector<int>& att = std::vector<int> (6, 1),
+           const std::vector<int>& att = std::vector<int> (kAttackAmount, 1),
            const std::vector<int>& def = std::vector<int> (3, 1),
            const std::vector<int>& tool = std::vector<int> (4, 1)):
            PersonContainer(s, p, skill, att, def, tool),
