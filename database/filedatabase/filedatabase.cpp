@@ -8,7 +8,7 @@ FileDataBase<T>::FileDataBase(const std::string& name): IDataBase<T>(name) {
     std::string line;
     while (f >> line) {
         T tmp = line;
-        items.emplace(tmp.getName(), tmp);
+        items[tmp.getName()] = tmp;
     }
     f.close();
 }
@@ -31,8 +31,8 @@ T FileDataBase<T>::get(const std::string& name) {
 template <typename T>
 FileDataBase<T>::~FileDataBase() {
     std::ofstream f(this->name_);
-    for (const auto& [key, value]: items) {
-        f << value.toString() << '\n';
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        f << (it->second).toString() << '\n';
     }
     f.close();
 }

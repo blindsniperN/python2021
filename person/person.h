@@ -38,6 +38,7 @@ namespace pers_class
     static const int tool_count_ = 4;
    public:
     std::string name_;
+    std::string getName() const { return name_; };
     // атаки
     DiceRoll Seduce(); // соблазнить
     DiceRoll MakeAnArgument(); // привести довод
@@ -63,7 +64,7 @@ namespace pers_class
     ~Person() = default;
 
     // для базы данных
-    Person(std::string&);
+    Person(std::string);
     std::string toString() const;
   };
 

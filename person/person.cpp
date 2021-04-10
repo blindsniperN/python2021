@@ -119,43 +119,31 @@ namespace pers_class
     return tool_prob_.Index(rand() % tool_prob_.Sum());
   }
 
-    std::string& popFirst(std::string& data) {
+    std::string popFirst(std::string& data) {
         std::string answer = data.substr(0, data.find(';'));
         data = data.substr(data.find(';'), data.size() - 1);
         return answer;
     }
 
-  Person::Person(std::string data) {
-      name_ = popFirst(data);
-      short* parameters = new short[ParameterList::parameter_count_];
-      for (int i = 0; i < ParameterList::parameter_count_; ++i) {
-          parameters[i] = std::stoi(popFirst(data));
-      }
-      parameters_ = ParameterList(parameters);
-      short* skills = new short[SkillList::skill_count_];
-      for (int i = 0; i < SkillList::skill_count_; ++i) {
-          parameters[i] = std::stoi(popFirst(data));
-      }
-      skills_ = SkillList(parameters_, skills);
+    short* popArray(std::string& data, int length) {
+        short* array = new short[length];
+        for (int i = 0; i < length; ++i) {
+            array[i] = std::stoi(popFirst(data));
+        }
+        return array;
+    }
 
-      std::vector<int> att;
-      for (int i = 0; i < att_count_; ++i) {
-          att.push_back(std::stoi(popFirst(data)));
-      }
-      att_prob_ = PrefixVector(att);
-
-      std::vector<int> def;
-      for (int i = 0; i < def_count_; ++i) {
-          def.push_back(std::stoi(popFirst(data)));
-      }
-      def_prob_ = PrefixVector(def);
-
-      std::vector<int> tools;
-      for (int i = 0; i < tool_count_; ++i) {
-          tools.push_back(std::stoi(popFirst(data)));
-      }
-      tool_prob_ = PrefixVector(tools);
-  }
+    std::vector<int> popVector(std::string& data, int length) {
+        std::vector<int> array(length);
+        for (int i = 0; i < length; ++i) {
+            array[i] = std::stoi(popFirst(data));
+        }
+        return array;
+    }
+  Person::Person(std::string data):     name_(popFirst(data)), parameters_(popArray(data, ParameterList::parameter_count_)),
+                                        skills_(parameters_, popArray(data, SkillList::skill_count_)),
+                                        att_prob_(popVector(data, att_count_)), def_prob_(popVector(data, def_count_)),
+                                        tool_prob_(popVector(data, tool_count_)) {}
 
   std::string Person::toString() const {
       std::string answer;
