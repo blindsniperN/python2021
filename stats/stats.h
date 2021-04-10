@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+
 namespace stats_library {
 
   class Parameter { // отвечает за один параметр из четырёх
@@ -18,14 +18,12 @@ namespace stats_library {
     Parameter will_; // воля
 
     Parameter max_determination_; // максимальное значение хп
-    static const int parameter_count_ = 4;
 
     ParameterList() = default;
     ParameterList(const short*);
     ~ParameterList() = default;
 
     void UpdateMaxDetermination(); // обновить макс. значение хп по формуле
-    std::string toString() const;
   };
 
   class Skill { // навык
@@ -56,13 +54,11 @@ namespace stats_library {
     // воля
     Skill intimidation_; // запугивание
     Skill persuasion_resist_; // сопротивление убеждению
-    static const int skill_count_ = 10;
 
     SkillList(ParameterList&);
     SkillList(ParameterList&, const short*);
     ~SkillList() = default;
-    std::string toString() const;
   };
 }
 
-#endif //STATS_H
+

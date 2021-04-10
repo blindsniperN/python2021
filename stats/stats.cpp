@@ -1,3 +1,4 @@
+#pragma once
 #include "stats.h"
 
 namespace stats_library {
@@ -45,3 +46,4 @@ namespace stats_library {
       return answer;
   }
 }
+
