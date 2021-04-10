@@ -1,5 +1,4 @@
-#ifndef STATS_H
-#define STATS_H
+#pragma once
 
 namespace stats_library {
 
@@ -62,5 +61,4 @@ namespace stats_library {
   };
 }
 
-#endif //STATS_H
 

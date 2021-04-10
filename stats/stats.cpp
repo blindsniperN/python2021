@@ -1,3 +1,4 @@
+#pragma once
 #include "stats.h"
 
 namespace stats_library {
