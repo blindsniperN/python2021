@@ -1,6 +1,7 @@
 #pragma once
 #include "../stats/stats.cpp"
 #include <string>
+#include "game_mechanics.h"
 #include <vector>
 
 namespace pers_class
@@ -26,14 +27,50 @@ namespace pers_class
     std::string toString() const;
   };
 
-  class Person {
+
+  class PersonContainer {
    public:
     std::string name_;
-    std::string getName() const { return name_; };
+    // конструктор / деструктор
+    PersonContainer(const std::string&, const stats_library::ParameterList&,
+           const stats_library::SkillList&, const std::vector<short>&,
+           const std::vector<short>&, const std::vector<short>&);
+    ~PersonContainer() = default;
+    // конструктор / деструктор
+
+    PersonContainer(const PersonContainer&);
+    PersonContainer& operator=(const PersonContainer& another);
+    // для базы данных
+    PersonContainer() = default;
+    PersonContainer(std::string);
+    std::string toString() const;
+  protected:
+      stats_library::ParameterList parameters_;
+      stats_library::SkillList skills_;
+      PrefixVector att_prob_; // вероятности атак
+      PrefixVector def_prob_; // вероятности защит
+      PrefixVector tool_prob_; // вероятности рычагов
+   protected:
+    stats_library::SkillList skills_;
+    stats_library::ParameterList parameters_;
+    PrefixVector att_prob_; // вероятности атак
+    PrefixVector def_prob_; // вероятности защит
+    PrefixVector tool_prob_; // вероятности рычагов
+  };
+
+  class Person: private PersonContainer {
+   private:
+    short health_ = 0; // поля для накапливающегося урона
+    short seduce_dmg_ = 0;
+    short emp_dmg_ = 0; // кумулятивный эффект на кумулятивные атаки
+    short deceive_to_hit_ = 0;
+    short mock_to_hit_ = 0;
+    short love_modifier_ = 0;
+   public:
     // атаки
     DiceRoll Seduce(); // соблазнить
     DiceRoll MakeAnArgument(); // привести довод
-    DiceRoll Intimidate(); // запугать
+    DiceRoll Convince(); // убедить
     DiceRoll Deceive(); // обмануть
     DiceRoll Mock(); // насмехнуться
     // защиты
@@ -48,28 +85,44 @@ namespace pers_class
     int RandomAttack();
     int RandomDefense();
     int RandomTool();
-    // конструктор / деструктор
-    Person(const std::string&, const stats_library::ParameterList&,
-           const stats_library::SkillList&, const std::vector<short>&,
-           const std::vector<short>&, const std::vector<short>&);
-    ~Person() = default;
-    Person(const Person&);
-    Person& operator=(const Person& another);
-    // для базы данных
-    Person() = default;
-    Person(std::string);
-    std::string toString() const;
-  protected:
-      stats_library::ParameterList parameters_;
-      stats_library::SkillList skills_;
-      PrefixVector att_prob_; // вероятности атак
-      PrefixVector def_prob_; // вероятности защит
-      PrefixVector tool_prob_; // вероятности рычагов
 
-      static const int att_count_ = 6;
-      static const int def_count_ = 2;
-      static const int tool_count_ = 4;
+    // конструктор
+    Person(const std::string& s, const stats_library::ParameterList& p,
+           const stats_library::SkillList& skill,
+           const std::vector<short>& att = std::vector<short> (kAttackAmount, 1),
+           const std::vector<short>& def = std::vector<short> (kDefenseAmount, 1),
+           const std::vector<short>& tool = std::vector<short> (kToolAmount, 1)):
+           PersonContainer(s, p, skill, att, def, tool),
+           health_(parameters_.max_determination_.value_) { }
+
+    // применение эффектов атак
+    void applySeduce(short); // эффект для защищающегося
+    void applyArgument(short); // привести довод
+    void applyConvinceDefenser(short); // убеждение по защищаемуся
+    void applyConvinceAttacker(short); // убеждение по атакующему
+    void applyDeceiveDefenser(short); // обмануть защищающийся
+    void applyDeceiveAttacker(); // обмануть атакующий
+    void applyMockDefenser(short); // насмехнуться по защищаемуся
+    void applyMockAttacker(short); // насмехнуться по защищаемуся
+    // защиты
+    void applyIgnore(short); // игнорировать
+    void applyChangeTheme(short); // смена темы
+    // рычаги
+    void applyLove(); // любовь
+    void applyResearch(); // изучить
+    /*
+    void applyHint(); // намёк
+    void applyBribe(); // подкуп
+     */
   };
+
+
+  void substractHealth(short& hp, short dmg) {
+    if (dmg < hp)
+      hp -= dmg;
+    else
+      hp = 0;
+  }
 
 }
 
