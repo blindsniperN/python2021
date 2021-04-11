@@ -11,7 +11,7 @@
 namespace teams
 {
 
-    Team::Team(const std::vector<Person>& people, int max_size): members_(people), size_(people.size()), max_size_(max_size) {
+    Team::Team(int max_size, const std::vector<Person>& people = std::vector<Person>(0)): members_(people), size_(people.size()), max_size_(max_size) {
         if (members_.size() > max_size_) {
             members_.resize(max_size_);
             size_ = max_size_;
@@ -19,14 +19,6 @@ namespace teams
             throw TooManyPeopleException();
         }
         shuffle();
-    }
-
-    template<typename... Args>
-    void Team::createTeam(Person person, Args... args) {
-        if (size_ < max_size_) {
-            add(person);
-            createTeam(args...);
-        }
     }
 
     void Team::createTeam() { return; }

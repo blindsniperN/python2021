@@ -10,11 +10,9 @@ namespace teams
 
     class Team {
     public:
-        Team(const std::vector<Person>&, int);
+        Team(int, const std::vector<Person>&);
         void add(Person);
 
-        template<typename... Args>
-        Team(int max_size, Args... args): max_size_(max_size) { createTeam(args...);}
         Person get();
 //        void apply(object)
         Person find(const std::string&);
