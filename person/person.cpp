@@ -2,18 +2,26 @@
 #include "person.h"
 #include <string>
 #include <vector>
-
 namespace pers_class
 {
+    using namespace stats_library;
   // вспомогательный класс префиксных векторов
 
-  PrefixVector::PrefixVector(const std::vector<int>& ref) {
-    a = std::vector<int> (ref.size());
-    a[0] = a[0];
+  PrefixVector::PrefixVector(const std::vector<short>& ref) {
+    a = std::vector<short> (ref.size());
+    a[0] = ref[0];
     for (int i = 1; i < ref.size(); ++i)
       a[i] = a[i - 1] + ref[i];
   }
 
+  std::string PrefixVector::toString() const {
+      std::string answer;
+      answer += std::to_string(a[0]);
+      for (int i = 1; i < a.size(); ++i) {
+          answer += "; " + std::to_string(a[i] - a[i - 1]);
+      }
+      return answer;
+  }
   // атаки
 
   DiceRoll Person::Seduce() {
@@ -97,9 +105,11 @@ namespace pers_class
   PersonContainer::PersonContainer(const std::string& s,
                                    const stats_library::ParameterList& p,
          const stats_library::SkillList& skill,
-         const std::vector<int>& att = std::vector<int> (kAttackAmount, 1),
-         const std::vector<int>& def = std::vector<int> (kDefenseAmount, 1),
-         const std::vector<int>& tool = std::vector<int> (kToolAmount, 1)):
+
+         const std::vector<short>& att = std::vector<int> (kAttackAmount, 1),
+         const std::vector<short>& def = std::vector<int> (kDefenseAmount, 1),
+         const std::vector<short>& tool = std::vector<int> (kToolAmount, 1)):
+
          name_(s), parameters_(p), skills_(skill), att_prob_(att),
          def_prob_(def), tool_prob_(tool) { }
 
@@ -116,6 +126,52 @@ namespace pers_class
   int Person::RandomTool() {
     return tool_prob_.Index(rand() % tool_prob_.Sum());
   }
+
+
+    std::string popFirst(std::string& data) {
+        std::string answer = data.substr(0, data.find(';'));
+        data = data.substr(data.find(';') + 2, data.size());
+        return answer;
+    }
+
+
+    std::vector<short> popVector(std::string& data, int length) {
+        std::vector<short> array(length);
+        for (int i = 0; i < length; ++i) {
+            array[i] = std::stoi(popFirst(data));
+        }
+        return array;
+    }
+  PersonContainer::PersonContainer(std::string data):     name_(popFirst(data)), parameters_(popVector(data, ParameterList::parameter_count_)),
+                                        skills_(parameters_, popVector(data, SkillList::skill_count_)),
+                                        att_prob_(popVector(data, att_count_)), def_prob_(popVector(data, def_count_)),
+                                        tool_prob_(popVector(data, tool_count_)) {}
+
+  std::string PersonContainer::toString() const {
+      std::string answer;
+      answer += name_ + "; ";
+      answer += parameters_.toString() + "; ";
+      answer += skills_.toString() + "; ";
+      answer += att_prob_.toString() + "; ";
+      answer += def_prob_.toString() + "; ";
+      answer += tool_prob_.toString() + "; ";
+      return answer;
+  }
+
+  PersonContainer& PersonContainer::operator=(const PersonContainer& another) {
+      name_ = another.name_;
+      parameters_ = another.parameters_;
+      std::vector<short> skills = another.skills_.getSkills();
+      skills_ = SkillList(parameters_, skills);
+      att_prob_ = another.att_prob_;
+      def_prob_ = another.def_prob_;
+      tool_prob_ = another.tool_prob_;
+      return *this;
+  }
+
+  PersonContainer::PersonContainer(const PersonContainer& another):    name_(another.name_), parameters_(another.parameters_),
+                                            skills_(parameters_, another.skills_.getSkills()), att_prob_(another.att_prob_),
+                                            def_prob_(another.def_prob_), tool_prob_(another.tool_prob_) {}
 
   // применение эффектов
 
@@ -171,5 +227,6 @@ namespace pers_class
   /*
   void Person::applyHint(); // намёк
   void Person::applyBribe(); // подкуп */
+
 }
 

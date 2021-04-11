@@ -16,29 +16,46 @@ namespace pers_class
 
   class PrefixVector {
    private:
-    std::vector<int> a;
+    std::vector<short> a;
    public:
     int Sum() { return a[a.size() - 1]; }
     int Index(int roll) { return lower_bound(a.begin(), a.end(), roll)
                                  - a.begin(); }
-    PrefixVector(const std::vector<int>&);
+    PrefixVector(const std::vector<short>&);
+    PrefixVector() = default;
     ~PrefixVector() = default;
+    std::string toString() const;
   };
 
+
   class PersonContainer {
+   public:
+    std::string name_;
+    // конструктор / деструктор
+    PersonContainer(const std::string&, const stats_library::ParameterList&,
+           const stats_library::SkillList&, const std::vector<short>&,
+           const std::vector<short>&, const std::vector<short>&);
+    ~PersonContainer() = default;
+    // конструктор / деструктор
+
+    PersonContainer(const PersonContainer&);
+    PersonContainer& operator=(const PersonContainer& another);
+    // для базы данных
+    PersonContainer() = default;
+    PersonContainer(std::string);
+    std::string toString() const;
+  protected:
+      stats_library::ParameterList parameters_;
+      stats_library::SkillList skills_;
+      PrefixVector att_prob_; // вероятности атак
+      PrefixVector def_prob_; // вероятности защит
+      PrefixVector tool_prob_; // вероятности рычагов
    protected:
     stats_library::SkillList skills_;
     stats_library::ParameterList parameters_;
     PrefixVector att_prob_; // вероятности атак
     PrefixVector def_prob_; // вероятности защит
     PrefixVector tool_prob_; // вероятности рычагов
-   public:
-    std::string name_;
-    // конструктор / деструктор
-    PersonContainer(const std::string&, const stats_library::ParameterList&,
-           const stats_library::SkillList&, const std::vector<int>&,
-           const std::vector<int>&, const std::vector<int>&);
-    ~PersonContainer() = default;
   };
 
   class Person: private PersonContainer {
@@ -72,9 +89,9 @@ namespace pers_class
     // конструктор
     Person(const std::string& s, const stats_library::ParameterList& p,
            const stats_library::SkillList& skill,
-           const std::vector<int>& att = std::vector<int> (kAttackAmount, 1),
-           const std::vector<int>& def = std::vector<int> (3, 1),
-           const std::vector<int>& tool = std::vector<int> (4, 1)):
+           const std::vector<short>& att = std::vector<short> (kAttackAmount, 1),
+           const std::vector<short>& def = std::vector<short> (kDefenseAmount, 1),
+           const std::vector<short>& tool = std::vector<short> (kToolAmount, 1)):
            PersonContainer(s, p, skill, att, def, tool),
            health_(parameters_.max_determination_.value_) { }
 
