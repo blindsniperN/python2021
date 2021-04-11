@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
 set(header database.h)
-add_library(DatabaseLibrary ${header})
+set(source database.cpp)
+add_library(DatabaseLibrary ${source} ${header})
