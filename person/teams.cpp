@@ -6,12 +6,10 @@
 #include "teams.h"
 #include <algorithm>
 #include <random>
-#include <exception>
-
+#include "../exceptions/exceptions.h"
+#include <iostream>
 namespace teams
 {
-    class TooManyPeopleException: public std::exception {}; // исключение бросаемое при переполнении команды
-    class PersonNotFound: public std::exception {};
 
     Team::Team(const std::vector<Person>& people, int max_size): members_(people), size_(people.size()), max_size_(max_size) {
         if (members_.size() > max_size_) {
@@ -40,7 +38,7 @@ namespace teams
 
     void Team::add(Person person) {
         if (size_ < max_size_) {
-            auto it = members_.begin() + rand() % size_; // Todo мб поставить другой рандом
+            auto it = members_.begin() + ((size_ != 0) ? rand() % size_ : 0); // Todo мб поставить другой рандом
             members_.insert(it, person);
             ++size_;
         } else {
@@ -58,7 +56,7 @@ namespace teams
         for (Person p: members_) {
             if (p.name_ == name) return p;
         }
-        throw PersonNotFound();
+        throw NotFound();
     }
 }
 

@@ -3,7 +3,7 @@
 #include "person.h"
 #include <string>
 #include <vector>
-
+#include <iostream>
 namespace teams
 {
     using namespace pers_class;
@@ -14,10 +14,11 @@ namespace teams
         void add(Person);
 
         template<typename... Args>
-        Team(Args... args, int max_size): max_size_(max_size) { createTeam(args...); }
+        Team(int max_size, Args... args): max_size_(max_size) { createTeam(args...);}
         Person get();
 //        void apply(object)
         Person find(const std::string&);
+        size_t size() { return size_; }
     private:
         std::vector<Person> members_;
         int max_size_;
