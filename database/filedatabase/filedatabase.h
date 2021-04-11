@@ -1,5 +1,5 @@
 #pragma once
-#include "../database.cpp"
+#include "../database.h"
 #include <string>
 #include <map>
 using namespace database;

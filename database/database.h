@@ -11,6 +11,9 @@ namespace database {
         virtual ~IDataBase() = 0;
 
     protected:
-        std::string name_;
+        std::string name_; // имя БД (в нашей нужно для названия файла)
     };
+
+    template <typename T>
+    IDataBase<T>::~IDataBase() {}
 }
