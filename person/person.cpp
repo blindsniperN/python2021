@@ -3,7 +3,6 @@
 #include "../stats/stats.cpp"
 #include <string>
 #include <vector>
-#include <iostream>
 namespace pers_class
 {
     using namespace stats_library;
@@ -121,7 +120,6 @@ namespace pers_class
 
     std::string popFirst(std::string& data) {
         std::string answer = data.substr(0, data.find(';'));
-        std::cout << answer << '\n';
         data = data.substr(data.find(';') + 2, data.size());
         return answer;
     }
