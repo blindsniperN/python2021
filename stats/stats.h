@@ -1,5 +1,6 @@
-#ifndef STATS_H
-#define STATS_H
+#pragma once
+#include <string>
+#include <vector>
 
 namespace stats_library {
 
@@ -19,23 +20,26 @@ namespace stats_library {
     Parameter will_; // воля
 
     Parameter max_determination_; // максимальное значение хп
-
+    static const short parameter_count_ = 4;
     ParameterList() = default;
-    ParameterList(const short*);
+    ParameterList(const std::vector<short>&);
     ~ParameterList() = default;
 
     void UpdateMaxDetermination(); // обновить макс. значение хп по формуле
+
+    std::string toString() const;
   };
 
   class Skill { // навык
    public:
     short value_ = 0; // значение от 0 до 10, распределение на старте игры
     short modifier_ = 0; // кумулятивный модификатор от атак
-    Parameter& parameter_; // параметр, от которого зависит навык
+    Parameter* parameter_ = nullptr; // параметр, от которого зависит навык
     
-    short Roll() { return value_ + modifier_ + parameter_.value_; }
-    Skill(Parameter& p): parameter_(p) {}
-    Skill(Parameter& p, short x): parameter_(p), value_(x) {}
+    short Roll() { return value_ + modifier_ + (*parameter_).value_; }
+    Skill() = default;
+    Skill(Parameter& p): parameter_(&p) {}
+    Skill(Parameter& p, short x): parameter_(&p), value_(x) {}
     ~Skill() = default;
   };
 
@@ -55,12 +59,14 @@ namespace stats_library {
     // воля
     Skill intimidation_; // запугивание
     Skill persuasion_resist_; // сопротивление убеждению
-
+    static const short skill_count_ = 10;
+    SkillList() = default;
     SkillList(ParameterList&);
-    SkillList(ParameterList&, const short*);
+    SkillList(ParameterList&, const std::vector<short>&);
     ~SkillList() = default;
+    std::string toString() const;
+    std::vector<short> getSkills() const;
   };
 }
 
-#endif //STATS_H
 
