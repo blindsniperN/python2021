@@ -13,7 +13,7 @@ public:
     const std::vector<short>& attack = std::vector<short> (6, 1),
     const std::vector<short>& defense = std::vector<short> (2, 1),
     const std::vector<short>& tools = std::vector<short> (4, 1)) const {
-        return pers_class::Person(name, parameters, skills, attack, defense, tools);
+        return pers_class::PersonContainer(name, parameters, skills, attack, defense, tools);
     };
 };
 

@@ -11,7 +11,7 @@
 namespace teams
 {
 
-    Team::Team(int max_size, const std::vector<Person>& people = std::vector<Person>(0)): members_(people), size_(people.size()), max_size_(max_size) {
+    Team::Team(int max_size, const std::vector<Person>& people = {}): members_(people), size_(people.size()), max_size_(max_size) {
         if (members_.size() > max_size_) {
             members_.resize(max_size_);
             size_ = max_size_;
@@ -46,7 +46,7 @@ namespace teams
 
     Person Team::find(const std::string& name) {
         for (Person p: members_) {
-            if (p.name_ == name) return p;
+            if (p.getName() == name) return p;
         }
         throw NotFound();
     }

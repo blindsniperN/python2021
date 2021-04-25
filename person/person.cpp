@@ -106,9 +106,9 @@ namespace pers_class
                                    const stats_library::ParameterList& p,
          const stats_library::SkillList& skill,
 
-         const std::vector<short>& att = std::vector<int> (kAttackAmount, 1),
-         const std::vector<short>& def = std::vector<int> (kDefenseAmount, 1),
-         const std::vector<short>& tool = std::vector<int> (kToolAmount, 1)):
+         const std::vector<short>& att = std::vector<short> (kAttackAmount, 1),
+         const std::vector<short>& def = std::vector<short> (kDefenseAmount, 1),
+         const std::vector<short>& tool = std::vector<short> (kToolAmount, 1)):
 
          name_(s), parameters_(p), skills_(skill), att_prob_(att),
          def_prob_(def), tool_prob_(tool) { }
@@ -144,8 +144,8 @@ namespace pers_class
     }
   PersonContainer::PersonContainer(std::string data):     name_(popFirst(data)), parameters_(popVector(data, ParameterList::parameter_count_)),
                                         skills_(parameters_, popVector(data, SkillList::skill_count_)),
-                                        att_prob_(popVector(data, att_count_)), def_prob_(popVector(data, def_count_)),
-                                        tool_prob_(popVector(data, tool_count_)) {}
+                                        att_prob_(popVector(data, kAttackAmount)), def_prob_(popVector(data, kDefenseAmount)),
+                                        tool_prob_(popVector(data, kToolAmount)) {}
 
   std::string PersonContainer::toString() const {
       std::string answer;

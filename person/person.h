@@ -30,7 +30,7 @@ namespace pers_class
 
   class PersonContainer {
    public:
-    std::string name_;
+      std::string getName() const { return name_; };
     // конструктор / деструктор
     PersonContainer(const std::string&, const stats_library::ParameterList&,
            const stats_library::SkillList&, const std::vector<short>&,
@@ -45,20 +45,15 @@ namespace pers_class
     PersonContainer(std::string);
     std::string toString() const;
   protected:
+      std::string name_;
       stats_library::ParameterList parameters_;
       stats_library::SkillList skills_;
       PrefixVector att_prob_; // вероятности атак
       PrefixVector def_prob_; // вероятности защит
       PrefixVector tool_prob_; // вероятности рычагов
-   protected:
-    stats_library::SkillList skills_;
-    stats_library::ParameterList parameters_;
-    PrefixVector att_prob_; // вероятности атак
-    PrefixVector def_prob_; // вероятности защит
-    PrefixVector tool_prob_; // вероятности рычагов
   };
 
-  class Person: private PersonContainer {
+  class Person: public PersonContainer {
    private:
     short health_ = 0; // поля для накапливающегося урона
     short seduce_dmg_ = 0;
@@ -94,7 +89,8 @@ namespace pers_class
            const std::vector<short>& tool = std::vector<short> (kToolAmount, 1)):
            PersonContainer(s, p, skill, att, def, tool),
            health_(parameters_.max_determination_.value_) { }
-
+    Person(const PersonContainer& base): PersonContainer(base), health_(parameters_.max_determination_.value_) {};
+    Person() = default; // для пустой команды
     // применение эффектов атак
     void applySeduce(short); // эффект для защищающегося
     void applyArgument(short); // привести довод
