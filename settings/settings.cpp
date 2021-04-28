@@ -6,6 +6,8 @@
 #include "person/person.h"
 #include "exceptions/exceptions.h"
 using namespace stats_library;
+using namespace pers_class;
+
 void print(const std::vector<PersonContainer>& v) {
     for (int i = 0; i < v.size(); ++i) std::cout << v[i].getName() << '\n';
 }
@@ -28,22 +30,12 @@ void Settings::Start() {
             case 2:
                 CreatePerson<false>();
                 break;
-            case 3: {
-                std::string name;
-                std::cout << "Who would you like to edit?\n";
-                print(protagonists_->listAll());
-                std::cin >> name;
-                UpdatePerson<true>(name);
+            case 3:
+                UpdatePerson<true>();
                 break;
-            }
-            case 4: {
-                std::string name;
-                std::cout << "Who would you like to edit?\n";
-                print(antagonists_->listAll());
-                std::cin >> name;
-                UpdatePerson<false>(name);
+            case 4:
+                UpdatePerson<false>();
                 break;
-            }
             case 5:
                 ok = false;
                 break;
@@ -87,18 +79,32 @@ std::vector<short> readVectorWithBoundary(int count, int boundary) {
     }
     return data;
 }
+void tryAdding(IDataBase<PersonContainer>*& db, PersonContainer& person) {
+    bool ok = false;
+    while (!ok)
+        try {
+            db->add(person);
+            std::cout << "The character has been successfully added to the database!\n";
+            ok = true;
+        } catch (AlreadyExists) {
+            std::cout << "Oops... Turns out a character with that name already exists. Please enter another name.\n";
+            std::string name;
+            std::cin >> name;
+            person.setName(name);
+        }
+}
 template <bool IsProtagonist>
 void Settings::CreatePerson() {
     int parameter_boundary, skill_boundary;
-    std::string db_name;
+    IDataBase<PersonContainer>* db;
     if (IsProtagonist) {
         parameter_boundary = kProtagonistParameters;
         skill_boundary = kProtagonistSkills;
-        db_name = kProtagonistsTableName;
+        db = protagonists_;
     } else {
         parameter_boundary = kAntagonistParameters;
         skill_boundary = kAntagonistSkills;
-        db_name = kAntagonistsTableName;
+        db = antagonists_;
     }
 
     std::string name;
@@ -131,19 +137,107 @@ void Settings::CreatePerson() {
     ParameterList parameterList(params);
     SkillList skillList(parameterList, skills);
     PersonContainer new_person(name, parameterList, skillList, att, def, tools);
-    bool ok = false;
-    while (!ok)
-        try {
-            if (IsProtagonist) protagonists_->add(new_person);
-            else antagonists_->add(new_person);
-            std::cout << "The character has been successfully added to the database!\n";
-            ok = true;
-        } catch (AlreadyExists) {
-            std::cout << "Oops... Turns out a character with that name already exists. Please enter another name.\n";
-            std::cin >> name;
-            new_person.setName(name);
-        }
+    tryAdding(db, new_person);
 }
 
+void Settings::showData(const PersonContainer& person) {
+    std::cout << "Character data\n";
+    std::cout << "Name: " << person.getName() << '\n';
+    std::cout << "Parameters: " << person.parameters_.toString() << "(Charm, Cunning, Intelligence, Will)\n";
+    std::cout << "Skills: " << person.skills_.toString() << "(Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion)";
+    std::cout << "Attack probabilities: " << person.att_prob_.toString() << "(Seduce, Make An Argument, Convince, Deceive, Mock)\n";
+    std::cout << "Defense probabilities: " << person.def_prob_.toString() << "(Ignore, Change Theme, Counterargument)\n";
+    std::cout << "Tools probabilities: " << person.tool_prob_.toString() << "(Love, Research, Hint, Bribe)\n";
+}
 template <bool IsProtagonist>
-void Settings::UpdatePerson(const std::string& name) {}
+void Settings::UpdatePerson() {
+    std::string name;
+    std::cout << "Who would you like to edit?\n";
+    print(protagonists_->listAll());
+    bool found = false;
+    PersonContainer person;
+    IDataBase<PersonContainer>* db = IsProtagonist ? protagonists_ : antagonists_;
+    int parameter_boundary, skill_boundary;
+    if (IsProtagonist) {
+        parameter_boundary = kProtagonistParameters;
+        skill_boundary = kProtagonistSkills;
+    } else {
+        parameter_boundary = kAntagonistParameters;
+        skill_boundary = kAntagonistSkills;
+    }
+    while (!found) {
+        std::cin >> name;
+        try {
+            person = db->get(name);
+            found = true;
+        } catch (NotFound) {
+            std::cout << "Oops... There are no characters with such name. Try to enter it again.\n";
+        }
+    }
+    db->del(name);
+    bool ok = true;
+    showData(person);
+
+    while (ok) {
+        std::cout << "What would you like to edit?\n";
+        std::cout << "1. Name\n";
+        std::cout << "2. Parameters\n";
+        std::cout << "3. Skills\n";
+        std::cout << "4. Attack probabilities\n";
+        std::cout << "5. Defense probabilities\n";
+        std::cout << "6. Tool probabilities\n";
+        std::cout << "7. Show character data again\n";
+        std::cout << "8. Stop editing this person\n";
+        int choice;
+        std::cin >> choice;
+        switch (choice) {
+            case 1:
+                std::cout << "Enter the character's name (only one word names are allowed)\n";
+                std::cin >> name;
+                person.name_ = name;
+                break;
+            case 2: {
+                std::cout << "Enter the parameters separated by a space in the following order: Charm, Cunning, Intelligence, Will. Their sum must not exceed " + std::to_string(parameter_boundary) << '\n';
+                std::vector<short> parameters = readVectorWithBoundary(kParameterCount, parameter_boundary);
+                person.parameters_ = ParameterList(parameters);
+                break;
+            }
+            case 3: {
+                std::cout <<
+                          "Enter the skills with a space in the following order: Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion. Their sum must not exceed " +
+                          std::to_string(skill_boundary) << '\n';
+                std::vector<short> skills = readVectorWithBoundary(kSkillCount, skill_boundary);
+                person.skills_ = SkillList(person.parameters_, skills);
+                break;
+            }
+            case 4: {
+                std::cout
+                        << "Enter the attack probabilities in the following order: Seduce, Make An Argument, Convince, Deceive, Mock\n";
+                std::vector<short> att = readVector(kAttackAmount);
+                person.att_prob_ = PrefixVector(att);
+                break;
+            }
+            case 5: {
+                std::cout
+                        << "Enter the defence probabilities in the following order: Ignore, Change Theme, Counterargument\n";
+                std::vector<short> def = readVector(kDefenseAmount);
+                person.def_prob_ = PrefixVector(def);
+                break;
+            }
+            case 6: {
+                std::cout << "Enter the attack probabilities in the following order: Love, Research, Hint, Bribe\n";
+                std::vector<short> tools = readVector(kToolAmount);
+                person.tool_prob_ = PrefixVector(tools);
+                break;
+            }
+            case 7:
+                showData(person);
+                break;
+            case 8:
+                ok = false;
+                break;
+        }
+    }
+
+    tryAdding(db, person);
+}
