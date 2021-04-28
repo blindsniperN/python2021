@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 namespace database {
     template <typename T>
     class IDataBase {
@@ -8,6 +9,7 @@ namespace database {
         virtual void add(const T&) = 0;
         virtual void del(const std::string&) = 0;
         virtual T& get(const std::string&) = 0;
+        virtual std::vector<T> listAll() = 0;
         virtual ~IDataBase() = 0;
 
     protected:

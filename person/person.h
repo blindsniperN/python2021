@@ -31,6 +31,7 @@ namespace pers_class
   class PersonContainer {
    public:
       std::string getName() const { return name_; };
+      void setName(const std::string& name) { name_ = name; }
     // конструктор / деструктор
     PersonContainer(const std::string&, const stats_library::ParameterList&,
            const stats_library::SkillList&, const std::vector<short>&,

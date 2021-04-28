@@ -1,5 +1,5 @@
 #pragma once
-#include "../database.h"
+#include "database/database.h"
 #include <string>
 #include <map>
 using namespace database;
@@ -11,6 +11,7 @@ public:
     void add(const T&) override;
     void del(const std::string&) override;
     T& get(const std::string&) override;
+    std::vector<T> listAll() override;
     ~FileDataBase() override;
 private:
     std::map<std::string, T> items;
