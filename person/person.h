@@ -14,6 +14,11 @@ namespace pers_class
     ~DiceRoll() = default;
   };
 
+  bool operator < (const DiceRoll &d1, const DiceRoll &d2)
+  {
+    return (d1.to_hit < d2.to_hit);
+  }
+
   class PrefixVector {
    private:
     std::vector<short> a;
