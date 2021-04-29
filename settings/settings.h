@@ -19,7 +19,7 @@ private:
     static void UpdatePerson();
 
     template<bool IsProtagonist>
-    static void DeletePerson(const std::string&);
+    static void DeletePerson();
 
 
 

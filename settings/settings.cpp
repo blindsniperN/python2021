@@ -20,7 +20,9 @@ void Settings::Start() {
         std::cout << "2. Create a new antagonist\n";
         std::cout << "3. Edit an existing protagonist\n";
         std::cout << "4. Edit an existing antagonist\n";
-        std::cout << "5. Exit settings\n";
+        std::cout << "5. Delete an existing protagonist\n";
+        std::cout << "6. Delete an existing antagonist\n";
+        std::cout << "7. Exit settings\n";
         int choice;
         std::cin >> choice;
         switch (choice) {
@@ -37,6 +39,12 @@ void Settings::Start() {
                 UpdatePerson<false>();
                 break;
             case 5:
+                DeletePerson<true>();
+                break;
+            case 6:
+                DeletePerson<false>();
+                break;
+            case 7:
                 ok = false;
                 break;
         }
@@ -151,20 +159,22 @@ void Settings::showData(const PersonContainer& person) {
 }
 template <bool IsProtagonist>
 void Settings::UpdatePerson() {
-    std::string name;
-    std::cout << "Who would you like to edit?\n";
-    print(protagonists_->listAll());
-    bool found = false;
-    PersonContainer person;
-    IDataBase<PersonContainer>* db = IsProtagonist ? protagonists_ : antagonists_;
+    IDataBase<PersonContainer>* db;
     int parameter_boundary, skill_boundary;
     if (IsProtagonist) {
         parameter_boundary = kProtagonistParameters;
         skill_boundary = kProtagonistSkills;
+        db = protagonists_;
     } else {
         parameter_boundary = kAntagonistParameters;
         skill_boundary = kAntagonistSkills;
+        db = antagonists_;
     }
+    std::string name;
+    std::cout << "Who would you like to edit?\n";
+    print(db->listAll());
+    bool found = false;
+    PersonContainer person;
     while (!found) {
         std::cin >> name;
         try {
@@ -240,4 +250,27 @@ void Settings::UpdatePerson() {
     }
 
     tryAdding(db, person);
+}
+
+template <bool IsProtagonist>
+void Settings::DeletePerson() {
+    IDataBase<PersonContainer>* db;
+    if (IsProtagonist) {
+        db = protagonists_;
+    } else {
+        db = antagonists_;
+    }
+    std::string name;
+    std::cout << "Who would you like to edit?\n";
+    print(db->listAll());
+    bool deleted = false;
+    while (!deleted) {
+        std::cin >> name;
+        try {
+            db->del(name);
+            deleted = true;
+        } catch (NotFound) {
+            std::cout << "Oops... There are no characters with such name. Try to enter it again.\n";
+        }
+    }
 }
