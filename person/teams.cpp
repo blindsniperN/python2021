@@ -50,5 +50,13 @@ namespace teams
         }
         throw NotFound();
     }
+
+    void Team::updateMaxSize(int new_max_size) {
+        max_size_ = new_max_size;
+        if (size_ > max_size_) {
+            size_ = max_size_;
+            members_.resize(size_);
+        }
+    }
 }
 

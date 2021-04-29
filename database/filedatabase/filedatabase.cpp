@@ -31,7 +31,7 @@ void FileDataBase<T>::del(const std::string& name) {
 }
 
 template <typename T>
-T& FileDataBase<T>::get(const std::string& name) {
+T FileDataBase<T>::get(const std::string& name) {
     if (items.find(name) != items.end())
         return items[name];
     else
@@ -40,7 +40,7 @@ T& FileDataBase<T>::get(const std::string& name) {
 }
 
 template <typename T>
-std::vector<T> FileDataBase<T>::listAll() {
+std::vector<T> FileDataBase<T>::listAll() const {
     std::vector<T> list;
     for (auto i = items.begin(); i != items.end(); ++i)
         list.push_back(i->second);

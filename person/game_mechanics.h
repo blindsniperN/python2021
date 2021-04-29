@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 // В этом файле лежат все константы, важные для внутренних механик
 // Как раз удовлетворяет отсутствию рандомных констант в коде
 // Кроме того, если предполагать, что это реальный проект, то
@@ -66,3 +67,10 @@ const int kToolAmount = 4;
 // названия таблиц
 const std::string kProtagonistsTableName = "lol";
 const std::string kAntagonistsTableName = "antagonists";
+
+// максимальная сложность
+const int kMaxDifficulty = 2;
+
+// количество героев на уровне в зависимости от сложности
+const std::vector<int> kMaxProtagonistsOnLevel = {5, 4, 3};
+const std::vector<int> kMaxAntagonistsOnLevel = {1, 1, 2};

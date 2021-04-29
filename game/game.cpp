@@ -1,6 +1,8 @@
 #include "game.h"
 #include <string>
-
+#include "database/database.h"
+#include "person/person.h"
+#include <ctime>
 namespace game {
   int Level::PlayLevel() {
     // дописать увеличение здоровья
@@ -31,5 +33,23 @@ namespace game {
       } else if (s == "mock") {
       }
     }
+  }
+
+  Level Level::GenerateRandom(int difficulty, teams::Team protagonists, const IDataBase<PersonContainer>* antagonists_db) {
+      difficulty = std::min(difficulty, kMaxDifficulty);
+      int max_protagonists, max_antagonists;
+      max_protagonists = kMaxProtagonistsOnLevel[difficulty];
+      max_antagonists = kMaxAntagonistsOnLevel[difficulty];
+      protagonists.updateMaxSize(max_protagonists);
+      teams::Team antagonists(max_antagonists);
+      std::vector<PersonContainer> antagonist_list = antagonists_db->listAll();
+      int count = antagonist_list.size();
+      srand(std::time(0));
+      for (int i = 0; i < std::min(max_antagonists, count); ++i) {
+          int select = rand() % antagonist_list.size();
+          antagonists.add(Person(antagonist_list[select]));
+          antagonist_list.erase(antagonist_list.begin() + select);
+      }
+      return Level(difficulty, protagonists, antagonists);
   }
 }

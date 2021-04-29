@@ -19,6 +19,8 @@ namespace game {
     // также тут можно немного настроить, если есть желание выдавать разное
     // количество очков за разные штуки
     int PlayLevel();
+
+    static Level GenerateRandom(int, teams::Team, const IDataBase<PersonContainer>*);
   };
 
 }
