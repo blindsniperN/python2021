@@ -74,6 +74,8 @@ namespace pers_class
     short mock_to_hit_ = 0;
     short love_modifier_ = 0;
    public:
+    short HP() { return health_; }
+
     // атаки
     DiceRoll Seduce(); // соблазнить
     DiceRoll MakeAnArgument(); // привести довод

@@ -18,8 +18,8 @@ namespace teams
 //        void apply(object)
         Person find(const std::string&);
         void del(const std::string&);
-        size_t size() { return size_; }
         void updateMaxSize(int);
+        size_t size() const { return size_; }
     private:
         std::vector<Person> members_;
         int max_size_;
