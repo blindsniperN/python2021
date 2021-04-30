@@ -168,7 +168,7 @@ namespace game {
               p.applyDeceiveAttacker();
             }
 
-          } else { // если противник меняет тему
+          } else {  // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
             std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
                       << " to Change Theme.\n";
