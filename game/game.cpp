@@ -13,7 +13,10 @@ namespace game {
   }
 
   int Level::PlayLevel() {
-    // дописать увеличение здоровья
+    for (size_t i = 0; i < antagonists_.size(); ++i) {
+      auto a = antagonists_.get();
+      a.HP() += 5 * difficulty_; // дописать увеличение здоровья
+    }
     SuccessPhrases success;
     FailurePhrases fail;
     std::cout << "The level has started...\n";
@@ -36,11 +39,13 @@ namespace game {
 
         if (s == "seduce") { // если атака - соблазнение
           pers_class::DiceRoll prota = p.Seduce();
+          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
           int defense = a.RandomDefense();
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -55,7 +60,8 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -71,11 +77,13 @@ namespace game {
 
         } else if (s == "argument") {
           pers_class::DiceRoll prota = p.MakeAnArgument();
+          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
           int defense = a.RandomDefense();
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -89,7 +97,8 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -103,11 +112,13 @@ namespace game {
           }
         } else if (s == "convince") {
           pers_class::DiceRoll prota = p.Convince();
+          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
           int defense = a.RandomDefense();
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -122,7 +133,8 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to ChangeTheme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -137,11 +149,13 @@ namespace game {
           }
         } else if (s == "deceive") {
           pers_class::DiceRoll prota = p.Deceive();
+          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
           int defense = a.RandomDefense();
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -156,7 +170,8 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -171,11 +186,13 @@ namespace game {
           }
         } else if (s == "mock") {
           pers_class::DiceRoll prota = p.Mock();
+          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
           int defense = a.RandomDefense();
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                                                    << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -190,7 +207,8 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-
+            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+                      << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
