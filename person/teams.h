@@ -14,8 +14,11 @@ namespace teams
         void add(Person);
 
         Person get();
+        Person getRandom();
 //        void apply(object)
         Person find(const std::string&);
+        void del(const std::string&);
+        void updateMaxSize(int);
         size_t size() const { return size_; }
     private:
         std::vector<Person> members_;

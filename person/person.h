@@ -3,7 +3,7 @@
 #include <string>
 #include "game_mechanics.h"
 #include <vector>
-
+#include "settings/settings.h"
 namespace pers_class
 {
 
@@ -36,6 +36,7 @@ namespace pers_class
   class PersonContainer {
    public:
       std::string getName() const { return name_; };
+      void setName(const std::string& name) { name_ = name; }
     // конструктор / деструктор
     PersonContainer(const std::string&, const stats_library::ParameterList&,
            const stats_library::SkillList&, const std::vector<short>&,
@@ -49,6 +50,7 @@ namespace pers_class
     PersonContainer() = default;
     PersonContainer(std::string);
     std::string toString() const;
+
   protected:
       std::string name_;
       stats_library::ParameterList parameters_;
@@ -56,6 +58,11 @@ namespace pers_class
       PrefixVector att_prob_; // вероятности атак
       PrefixVector def_prob_; // вероятности защит
       PrefixVector tool_prob_; // вероятности рычагов
+
+      template<bool IsProtagonist>
+      friend void Settings::UpdatePerson();
+
+      friend void Settings::showData(const PersonContainer&);
   };
 
   class Person: public PersonContainer {
