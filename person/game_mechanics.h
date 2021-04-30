@@ -74,3 +74,6 @@ const int kMaxDifficulty = 2;
 // количество героев на уровне в зависимости от сложности
 const std::vector<int> kMaxProtagonistsOnLevel = {5, 4, 3};
 const std::vector<int> kMaxAntagonistsOnLevel = {1, 1, 2};
+
+// путь к бд
+const std::string kPathToData = "database/filedatabase/data/";

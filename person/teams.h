@@ -13,10 +13,10 @@ namespace teams
         Team(int, const std::vector<Person>&);
         void add(Person);
 
-        Person get();
-        Person getRandom();
+        Person& get();
+        Person& getRandom();
 //        void apply(object)
-        Person find(const std::string&);
+        Person& find(const std::string&);
         void del(const std::string&);
         void updateMaxSize(int);
         size_t size() const { return size_; }

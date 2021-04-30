@@ -2,6 +2,7 @@
 #include "person.h"
 #include <string>
 #include <vector>
+#include "auxiliary/parse_string.h"
 namespace pers_class
 {
     using namespace stats_library;
@@ -128,20 +129,20 @@ namespace pers_class
   }
 
 
-    std::string popFirst(std::string& data) {
-        std::string answer = data.substr(0, data.find(';'));
-        data = data.substr(data.find(';') + 2, data.size());
-        return answer;
-    }
-
-
-    std::vector<short> popVector(std::string& data, int length) {
-        std::vector<short> array(length);
-        for (int i = 0; i < length; ++i) {
-            array[i] = std::stoi(popFirst(data));
-        }
-        return array;
-    }
+//    std::string popFirst(std::string& data) {
+//        std::string answer = data.substr(0, data.find(';'));
+//        data = data.substr(data.find(';') + 2, data.size());
+//        return answer;
+//    }
+//
+//
+//    std::vector<short> popVector(std::string& data, int length) {
+//        std::vector<short> array(length);
+//        for (int i = 0; i < length; ++i) {
+//            array[i] = std::stoi(popFirst(data));
+//        }
+//        return array;
+//    }
   PersonContainer::PersonContainer(std::string data):     name_(popFirst(data)), parameters_(popVector(data, ParameterList::parameter_count_)),
                                         skills_(parameters_, popVector(data, SkillList::skill_count_)),
                                         att_prob_(popVector(data, kAttackAmount)), def_prob_(popVector(data, kDefenseAmount)),

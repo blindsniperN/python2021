@@ -40,19 +40,19 @@ namespace teams
         }
     }
 
-    Person Team::get() {
+    Person& Team::get() {
         int index = current_attacker_;
         current_attacker_ = (current_attacker_ + 1) % size_;
         return members_[index];
     }
 
-    Person Team::getRandom() {
+    Person& Team::getRandom() {
         int index = rand() % size_;
         return members_[index];
     }
 
-    Person Team::find(const std::string& name) {
-        for (Person p: members_) {
+    Person& Team::find(const std::string& name) {
+        for (Person& p: members_) {
             if (p.getName() == name) return p;
         }
         throw NotFound();

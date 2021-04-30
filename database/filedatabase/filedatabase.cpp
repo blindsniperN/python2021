@@ -3,9 +3,10 @@
 #include <fstream>
 #include <iostream>
 #include "exceptions/exceptions.h"
+#include "person/game_mechanics.h"
 template <typename T>
 FileDataBase<T>::FileDataBase(const std::string& name): IDataBase<T>(name) {
-    std::ifstream f("database/filedatabase/data/" + name);
+    std::ifstream f(kPathToData + name);
     std::string line;
     while (std::getline(f, line)) {
         T tmp = line;
@@ -44,12 +45,13 @@ std::vector<T> FileDataBase<T>::listAll() const {
     std::vector<T> list;
     for (auto i = items.begin(); i != items.end(); ++i)
         list.push_back(i->second);
+
     return list;
 }
 
 template <typename T>
 FileDataBase<T>::~FileDataBase() {
-    std::ofstream f("database/filedatabase/data/" + this->name_);
+    std::ofstream f(kPathToData + this->name_);
     for (auto it = items.begin(); it != items.end(); ++it) {
         f << (it->second).toString() << '\n';
     }
