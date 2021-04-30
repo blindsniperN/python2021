@@ -16,6 +16,7 @@ namespace teams
         Person get();
 //        void apply(object)
         Person find(const std::string&);
+        void del(const std::string&);
         size_t size() { return size_; }
         void updateMaxSize(int);
     private:

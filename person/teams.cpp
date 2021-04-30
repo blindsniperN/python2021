@@ -8,6 +8,7 @@
 #include <random>
 #include "../exceptions/exceptions.h"
 #include <iostream>
+#include <ctime>
 namespace teams
 {
 
@@ -29,8 +30,9 @@ namespace teams
     }
 
     void Team::add(Person person) {
+        srand(std::time(0));
         if (size_ < max_size_) {
-            auto it = members_.begin() + ((size_ != 0) ? rand() % size_ : 0); // Todo мб поставить другой рандом
+            auto it = members_.begin() + ((size_ != 0) ? rand() % (size_ + 1) : 0); // Todo мб поставить другой рандом
             members_.insert(it, person);
             ++size_;
         } else {
@@ -47,6 +49,17 @@ namespace teams
     Person Team::find(const std::string& name) {
         for (Person p: members_) {
             if (p.getName() == name) return p;
+        }
+        throw NotFound();
+    }
+
+    void Team::del(const std::string& name) {
+        for (auto it = members_.begin(); it != members_.end(); ++it) {
+            if (it->getName() == name) {
+                members_.erase(it);
+                --size_;
+                return;
+            }
         }
         throw NotFound();
     }
