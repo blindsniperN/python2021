@@ -14,6 +14,7 @@ namespace teams
         void add(Person);
 
         Person get();
+        Person getRandom();
 //        void apply(object)
         Person find(const std::string&);
         void del(const std::string&);

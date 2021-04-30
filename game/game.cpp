@@ -44,7 +44,7 @@ namespace game {
       teams::Team antagonists(max_antagonists);
       std::vector<PersonContainer> antagonist_list = antagonists_db->listAll();
       int count = antagonist_list.size();
-      srand(std::time(0));
+      //srand(std::time(0));
       for (int i = 0; i < std::min(max_antagonists, count); ++i) {
           int select = rand() % antagonist_list.size();
           antagonists.add(Person(antagonist_list[select]));

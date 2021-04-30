@@ -30,7 +30,7 @@ namespace teams
     }
 
     void Team::add(Person person) {
-        srand(std::time(0));
+        //srand(std::time(0));
         if (size_ < max_size_) {
             auto it = members_.begin() + ((size_ != 0) ? rand() % (size_ + 1) : 0); // Todo мб поставить другой рандом
             members_.insert(it, person);
@@ -43,6 +43,11 @@ namespace teams
     Person Team::get() {
         int index = current_attacker_;
         current_attacker_ = (current_attacker_ + 1) % size_;
+        return members_[index];
+    }
+
+    Person Team::getRandom() {
+        int index = rand() % size_;
         return members_[index];
     }
 
