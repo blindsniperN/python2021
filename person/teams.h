@@ -16,7 +16,7 @@ namespace teams
         Person get();
 //        void apply(object)
         Person find(const std::string&);
-        size_t size() { return size_; }
+        size_t size() const { return size_; }
     private:
         std::vector<Person> members_;
         int max_size_;
