@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <random>
 #include "../exceptions/exceptions.h"
+#include "database/database.h"
 #include <iostream>
 #include <ctime>
 namespace teams
@@ -75,6 +76,33 @@ namespace teams
             size_ = max_size_;
             members_.resize(size_);
         }
+    }
+    void print(const std::vector<PersonContainer>& v) {
+        for (int i = 0; i < v.size(); ++i) std::cout << v[i].getName() << '\n';
+    }
+
+    Team Team::FormTeam(int max_size, const IDataBase<PersonContainer>* protagonists_db) {
+        Team new_team(max_size);
+        std::cout << "Now you need to form a team! Due to the chosen difficulty, its maximum size shouldn't exceed " << max_size << " characters\n";
+        std::cout << "Select characters from the following list (they shouldn't dublicate)\n";
+        std::vector<PersonContainer> protagonists = protagonists_db->listAll();
+        print(protagonists);
+        std::cout << "What size do you want your team be?\n";
+        int size;
+        std::cin >> size;
+        size = std::min(size, max_size);
+        std::cout << "No enter character's names\n";
+        for (int i = 0; i < size; ++i) {
+            std::string name;
+            std::cin >> name;
+            try {
+                new_team.add(protagonists_db->get(name));
+            } catch (NotFound) {
+                std::cout << "Oops... There are no such characters. Please try again.";
+                --i;
+            }
+        }
+        return new_team;
     }
 }
 

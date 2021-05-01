@@ -32,9 +32,9 @@ void FileDataBase<T>::del(const std::string& name) {
 }
 
 template <typename T>
-T FileDataBase<T>::get(const std::string& name) {
+T FileDataBase<T>::get(const std::string& name) const {
     if (items.find(name) != items.end())
-        return items[name];
+        return items.at(name);
     else
         throw NotFound();
 

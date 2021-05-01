@@ -10,7 +10,7 @@ public:
     FileDataBase(const std::string&);
     void add(const T&) override;
     void del(const std::string&) override;
-    T get(const std::string&) override;
+    T get(const std::string&) const override;
     std::vector<T> listAll() const override;
     ~FileDataBase() override;
 private:

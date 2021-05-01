@@ -20,6 +20,8 @@ namespace teams
         void del(const std::string&);
         void updateMaxSize(int);
         size_t size() const { return size_; }
+
+        static Team FormTeam(int, const IDataBase<PersonContainer>*);
     private:
         std::vector<Person> members_;
         int max_size_;

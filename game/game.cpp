@@ -6,6 +6,7 @@
 #include "../phrases/phrases.cpp"
 
 namespace game {
+
   void print_team(const std::string& s, teams::Team& team1) {
     std::string s1;
     for (size_t i = 0; i < team1.size(); ++i) { // вывести живых шанелей
@@ -407,5 +408,16 @@ namespace game {
           antagonist_list.erase(antagonist_list.begin() + select);
       }
       return Level(difficulty, protagonists, antagonists);
+  }
+
+  void Play(const IDataBase<PersonContainer>* protagonists_db, const IDataBase<PersonContainer>* antagonists_db) {
+      std::cout << "Please select the difficulty of the level (0-" << kMaxDifficulty << ")\n";
+      int difficulty;
+      std::cin >> difficulty;
+      difficulty = std::min(kMaxDifficulty, std::max(0, difficulty)); // откидываем неправильные данные
+      teams::Team protagonists = teams::Team::FormTeam(kMaxProtagonistsOnLevel[difficulty], protagonists_db);
+      Level level = Level::GenerateRandom(difficulty, protagonists, antagonists_db);
+      int result = level.PlayLevel();
+      // do smth with result?
   }
 }
