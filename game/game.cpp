@@ -29,7 +29,8 @@ namespace game {
       print_team("Chanels", protagonists_);
       print_team("enemies", antagonists_); // вывести живых врагов
       // ============================ ХОД ИГРОКА =================================
-      for (size_t i = 0; i < protagonists_.size(); ++i) {
+      int size = protagonists_.size();
+      for (size_t i = 0; i < size; ++i) {
         auto p = protagonists_.get();
         std::cout << "Current move is by your character " << p.getName()
                   << '\n';
@@ -47,8 +48,9 @@ namespace game {
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Ignore.\n";
+            std::cout << prota.to_hit << ' ' << anta.to_hit << ' ' << difficulty_ << '\n';
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -63,8 +65,9 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Change Theme.\n";
+              std::cout << prota.to_hit << ' ' << anta.to_hit << ' ' << difficulty_ << '\n';
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
               std::cout << "You failed to attack!\n";
@@ -84,7 +87,7 @@ namespace game {
           int defense = a.RandomDefense();
           if (defense == 0) { // если противник игнорирует
               pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -99,7 +102,7 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -119,7 +122,7 @@ namespace game {
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -135,7 +138,7 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to ChangeTheme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -156,7 +159,7 @@ namespace game {
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -172,7 +175,7 @@ namespace game {
 
           } else {  // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -193,7 +196,7 @@ namespace game {
 
           if (defense == 0) { // если противник игнорирует
             pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                                                     << " to Ignore.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален
@@ -209,7 +212,7 @@ namespace game {
 
           } else { // если противник меняет тему
             pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
+            std::cout << a.getName() << " rolled " << anta.to_hit + difficulty_
                       << " to Change Theme.\n";
             if (prota.to_hit <
                 anta.to_hit + difficulty_) { // если бросок провален

@@ -1,0 +1,3 @@
+C:/Coding/ScreamQueens/CMakeFiles/edit_cache.dir
+C:/Coding/ScreamQueens/CMakeFiles/Main.dir
+C:/Coding/ScreamQueens/CMakeFiles/rebuild_cache.dir
