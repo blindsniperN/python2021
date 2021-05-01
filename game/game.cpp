@@ -82,9 +82,8 @@ namespace game {
           pers_class::DiceRoll prota = p.MakeAnArgument();
           std::cout << "You rolled " << prota.to_hit << " to hit.\n";
           int defense = a.RandomDefense();
-
           if (defense == 0) { // если противник игнорирует
-            pers_class::DiceRoll anta = a.Ignore();
+              pers_class::DiceRoll anta = a.Ignore();
             std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
                       << " to Ignore.\n";
             if (prota.to_hit <

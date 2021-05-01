@@ -2,6 +2,7 @@
 #include "person.h"
 #include <string>
 #include <vector>
+#include <iostream>
 #include "auxiliary/parse_string.h"
 namespace pers_class
 {

@@ -122,17 +122,18 @@ void Settings::CreatePerson() {
     std::vector<short> params = readVectorWithBoundary(kParameterCount, parameter_boundary);
     std::cout << "Enter the skills with a space in the following order: Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion. Their sum must not exceed " + std::to_string(skill_boundary) << '\n';
     std::vector<short> skills = readVectorWithBoundary(kSkillCount, skill_boundary);
-    std::cout << "Move on to setting up random attacks. ";
-    int choice = 2;
-    if (IsProtagonist) {
-        std::cout << "Do you want to set them up? They can only be useful if you select the 'Random Attack' option during combat.\n";
-        std::cout << "1. No, I don't want to set it up now\n";
-        std::cout << "2. Yes, I do.\n";
-        std::cin >> choice;
-    } else std::cout << '\n';
-    std::vector<short> att(kAttackAmount, 0);
-    std::vector<short> def(kDefenseAmount, 0);
-    std::vector<short> tools(kToolAmount, 0);
+    std::cout << "Move on to setting up random attacks. Do you want to set them up? ";
+    int choice;
+    if (IsProtagonist)
+        std::cout << "They can only be useful if you select the 'Random Attack' option during combat.\n";
+    else
+        std::cout << "If you don't all attacks/defenses/tools probabilities will be equal\n";
+    std::cout << "1. No, I don't want to set it up now\n";
+    std::cout << "2. Yes, I do.\n";
+    std::cin >> choice;
+    std::vector<short> att(kAttackAmount, 1);
+    std::vector<short> def(kDefenseAmount, 1);
+    std::vector<short> tools(kToolAmount, 1);
     if (choice == 2) {
         std::cout << "You need to enter integers, separated by a space. Their ratio will be the ratio of the probabilities of the actions.\n";
         std::cout << "Enter the attack probabilities in the following order: Seduce, Make An Argument, Convince, Deceive, Mock\n";

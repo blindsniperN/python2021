@@ -23,7 +23,7 @@ namespace pers_class
    private:
     std::vector<short> a;
    public:
-    int Sum() { return a[a.size() - 1]; }
+    int Sum() { return a.back(); }
     int Index(int roll) { return lower_bound(a.begin(), a.end(), roll)
                                  - a.begin(); }
     PrefixVector(const std::vector<short>&);
