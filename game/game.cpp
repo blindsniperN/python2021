@@ -29,7 +29,8 @@ namespace game {
       print_team("Chanels", protagonists_);
       print_team("enemies", antagonists_); // вывести живых врагов
       // ============================ ХОД ИГРОКА =================================
-      for (size_t i = 0; i < protagonists_.size(); ++i) {
+      int size = protagonists_.size();
+      for (size_t i = 0; i < size; ++i) {
         auto p = protagonists_.get();
         std::cout << "Current move is by your character " << p.getName()
                   << '\n';
