@@ -84,6 +84,7 @@ const int kIDArgument = 001;
 const int kIDConvince = 002;
 const int kIDDeceive = 003;
 const int kIDMock = 004;
+
 // ID для защит
 const int kIDIgnore = 100;
 const int kIDChangeTheme = 101;
