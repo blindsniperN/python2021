@@ -8,6 +8,7 @@ namespace stats_library {
     cunning_.value_ = arr[1];
     intelligence_.value_ = arr[2];
     will_.value_ = arr[3];
+    UpdateMaxDetermination();
   }
 
   std::string ParameterList::toString() const {

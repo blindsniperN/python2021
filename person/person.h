@@ -3,7 +3,7 @@
 #include <string>
 #include "game_mechanics.h"
 #include <vector>
-
+#include "../settings/settings.h"
 namespace pers_class
 {
 
@@ -14,11 +14,16 @@ namespace pers_class
     ~DiceRoll() = default;
   };
 
+  bool operator < (const DiceRoll &d1, const DiceRoll &d2)
+  {
+    return (d1.to_hit < d2.to_hit);
+  }
+
   class PrefixVector {
    private:
     std::vector<short> a;
    public:
-    int Sum() { return a[a.size() - 1]; }
+    int Sum() { return a.back(); }
     int Index(int roll) { return lower_bound(a.begin(), a.end(), roll)
                                  - a.begin(); }
     PrefixVector(const std::vector<short>&);
@@ -30,7 +35,8 @@ namespace pers_class
 
   class PersonContainer {
    public:
-    std::string name_;
+      std::string getName() const { return name_; };
+      void setName(const std::string& name) { name_ = name; }
     // конструктор / деструктор
     PersonContainer(const std::string&, const stats_library::ParameterList&,
            const stats_library::SkillList&, const std::vector<short>&,
@@ -44,21 +50,22 @@ namespace pers_class
     PersonContainer() = default;
     PersonContainer(std::string);
     std::string toString() const;
+
   protected:
+      std::string name_;
       stats_library::ParameterList parameters_;
       stats_library::SkillList skills_;
       PrefixVector att_prob_; // вероятности атак
       PrefixVector def_prob_; // вероятности защит
       PrefixVector tool_prob_; // вероятности рычагов
-   protected:
-    stats_library::SkillList skills_;
-    stats_library::ParameterList parameters_;
-    PrefixVector att_prob_; // вероятности атак
-    PrefixVector def_prob_; // вероятности защит
-    PrefixVector tool_prob_; // вероятности рычагов
+
+      template<bool IsProtagonist>
+      friend void Settings::UpdatePerson();
+
+      friend void Settings::showData(const PersonContainer&);
   };
 
-  class Person: private PersonContainer {
+  class Person: public PersonContainer {
    private:
     short health_ = 0; // поля для накапливающегося урона
     short seduce_dmg_ = 0;
@@ -67,6 +74,8 @@ namespace pers_class
     short mock_to_hit_ = 0;
     short love_modifier_ = 0;
    public:
+    short& HP() { return health_; }
+
     // атаки
     DiceRoll Seduce(); // соблазнить
     DiceRoll MakeAnArgument(); // привести довод
@@ -85,6 +94,8 @@ namespace pers_class
     int RandomAttack();
     int RandomDefense();
     int RandomTool();
+    // атака по вводу
+    DiceRoll ActionFromInput(int&, std::string);
 
     // конструктор
     Person(const std::string& s, const stats_library::ParameterList& p,
@@ -94,7 +105,8 @@ namespace pers_class
            const std::vector<short>& tool = std::vector<short> (kToolAmount, 1)):
            PersonContainer(s, p, skill, att, def, tool),
            health_(parameters_.max_determination_.value_) { }
-
+    Person(const PersonContainer& base): PersonContainer(base), health_(parameters_.max_determination_.value_) {};
+    Person() = default; // для пустой команды
     // применение эффектов атак
     void applySeduce(short); // эффект для защищающегося
     void applyArgument(short); // привести довод
