@@ -65,7 +65,7 @@ const int kDefenseAmount = 3;
 const int kToolAmount = 4;
 
 // названия таблиц
-const std::string kProtagonistsTableName = "lol";
+const std::string kProtagonistsTableName = "protagonists";
 const std::string kAntagonistsTableName = "antagonists";
 
 // максимальная сложность

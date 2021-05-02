@@ -153,7 +153,7 @@ void Settings::showData(const PersonContainer& person) {
     std::cout << "Character data\n";
     std::cout << "Name: " << person.getName() << '\n';
     std::cout << "Parameters: " << person.parameters_.toString() << "(Charm, Cunning, Intelligence, Will)\n";
-    std::cout << "Skills: " << person.skills_.toString() << "(Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion)";
+    std::cout << "Skills: " << person.skills_.toString() << "(Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion)\n";
     std::cout << "Attack probabilities: " << person.att_prob_.toString() << "(Seduce, Make An Argument, Convince, Deceive, Mock)\n";
     std::cout << "Defense probabilities: " << person.def_prob_.toString() << "(Ignore, Change Theme, Counterargument)\n";
     std::cout << "Tools probabilities: " << person.tool_prob_.toString() << "(Love, Research, Hint, Bribe)\n";
