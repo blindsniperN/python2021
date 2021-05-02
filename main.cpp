@@ -13,56 +13,49 @@ using namespace teams;
 using namespace database;
 using namespace pers_class;
 using namespace game;
+
+void Help() {
+    std::cout << "Very informative help\n";
+}
+
 int main() {
     srand(std::time(0));
     IDataBase<PersonContainer>* protagonists = new FileDataBase<PersonContainer>(kProtagonistsTableName);
     IDataBase<PersonContainer>* antagonists = new FileDataBase<PersonContainer>(kAntagonistsTableName);
     Settings::protagonists_ = protagonists;
     Settings::antagonists_ = antagonists;
-    Settings::Start();
-//    Team heroes(3);
-//    std::vector<PersonContainer> help = protagonists->listAll();
-//    //help.resize(std::min(3, help.size()));
-//    for (const auto& i: help) {
-//        heroes.add(Person(i));
-//    }
-//
-//    for (int i = 0; i < heroes.size(); ++i)
-//        std::cout << heroes.get().getName() << ' ';
-//    Level level = Level::GenerateRandom(2, heroes, antagonists);
-//    level.PlayLevel();
+
+    bool exit = false;
+    while (!exit) {
+        std::cout << "Welcome to Scream Queens Game! What would you like to do?\n";
+        std::cout << "1. Read rules\n";
+        std::cout << "2. Play\n";
+        std::cout << "3. Settings\n";
+        std::cout << "4. Exit\n";
+        int choice;
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                Help(); // запустить помощь
+                break;
+            case 2:
+                Play(protagonists, antagonists);
+                break;
+            case 3:
+                Settings::Start();
+                break;
+            case 4:
+                exit = true;
+                break;
+            default:
+                std::cout << "No such option was provided. Try again.\n";
+        }
+    }
+
+
     delete protagonists;
     delete antagonists;
-//    IDataBase<PersonContainer>* db = new FileDataBase<PersonContainer>("lol");
-////    std::cout << "created";
-////    Factory personFactory;
-////    std::vector<short> params(4);
-////    params[0] = 0; params[1] = 1; params[2] = 2; params[3] = 3;
-////    ParameterList parameterList(params);
-////    std::vector<short> skills(10);
-////    for (short i = 0; i < 10; ++i) {
-////        skills[i] = i;
-////    }
-////    SkillList skillList(parameterList, skills);
-////    std::cout << "lol";
-////    skills = skillList.getSkills();
-////    std::cout << '"' << skills.size() << '"';
-////    for (int i = 0; i < 10; ++i) {
-////        std::cout << skills[i] << '\n';
-////    }
-////    std::vector<short> attack(6, 1);
-////    std::vector<short> defense(2, 1);
-////    std::vector<short> tools(4, 1);
-////    Person person = personFactory.createPerson("Test", parameterList, skillList, attack, defense, tools);
-////    db->add(person);
-//    std::vector<Person> test_vec;
-//    test_vec.push_back(db->get("Test"));
-//    test_vec.push_back(db->get("LOl"));
-//    Team test = Team(2, test_vec);
-//    std::cout << test.find("lol").toString() << '\n';
-//    for (int i = 0; i < test.size(); ++i) {
-//        std::cout << test.get().toString() << '\n';
-//    }
-//    delete db;
+
 }
 
