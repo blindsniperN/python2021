@@ -2,6 +2,7 @@
 #include <vector>
 #include "../person/teams.cpp"
 #include "../phrases/phrases.cpp"
+#include "../database/database.h"
 
 namespace game {
 
@@ -20,7 +21,8 @@ namespace game {
     // количество очков за разные штуки
     int PlayLevel();
 
-    static Level GenerateRandom(int, teams::Team, const IDataBase<PersonContainer>*);
+    static Level GenerateRandom(int, teams::Team,
+                                const database::IDataBase<pers_class::PersonContainer>*);
   };
 
 }

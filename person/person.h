@@ -3,7 +3,7 @@
 #include <string>
 #include "game_mechanics.h"
 #include <vector>
-#include "settings/settings.h"
+#include "../settings/settings.h"
 namespace pers_class
 {
 
@@ -94,6 +94,8 @@ namespace pers_class
     int RandomAttack();
     int RandomDefense();
     int RandomTool();
+    // атака по вводу
+    DiceRoll AttackFromInput();
 
     // конструктор
     Person(const std::string& s, const stats_library::ParameterList& p,

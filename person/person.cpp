@@ -38,7 +38,7 @@ namespace pers_class
     DiceRoll ans;
     ans.to_hit = 1 + rand() % kHitDice + skills_.leadership_.Roll()
             + love_modifier_;
-    ans.dmg = 1 + rand() % kArgumentDmgDice + parameters_.charm_.value_;
+    ans.dmg = 1 + rand() % kArgumentDmgDice + parameters_.cunning_.value_;
     return ans;
   }
 
@@ -54,7 +54,7 @@ namespace pers_class
     DiceRoll ans;
     ans.to_hit = std::max(1 + rand() % kHitDice +
             skills_.deception_.Roll() - deceive_to_hit_ + love_modifier_, 0);
-    ans.dmg = 1 + rand() % kDeceiveDmgDice + parameters_.intelligence_.value_;
+    ans.dmg = 1 + rand() % kDeceiveDmgDice + parameters_.cunning_.value_;
     return ans;
   }
 
@@ -229,6 +229,10 @@ namespace pers_class
   /*
   void Person::applyHint(); // намёк
   void Person::applyBribe(); // подкуп */
-
+  DiceRoll Person::AttackFromInput() {
+    std::string s;
+    std::cout << "Type in the name of the attack you want to do\n";
+    std::cin >> s;
+  }
 }
 

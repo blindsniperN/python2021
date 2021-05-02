@@ -1,12 +1,13 @@
 #include "game.h"
 #include <string>
-#include "database/database.h"
-#include "person/person.h"
+#include "../database/database.h"
+#include "../person/person.h"
 #include <ctime>
 #include "../phrases/phrases.cpp"
 
 namespace game {
 
+  // вывести тиму на экран
   void print_team(const std::string& s, teams::Team& team1) {
     std::string s1;
     for (size_t i = 0; i < team1.size(); ++i) { // вывести живых шанелей
@@ -14,6 +15,19 @@ namespace game {
       if (i != team1.size() - 1) s1 += ", ";
     }
     std::cout << "Remaining " << s << " are: " << s1 << '\n';
+  }
+
+  // проверить на смерть
+  void checkDeath(pers_class::Person& a, pers_class::Person& p,
+                  teams::Team& protagonists_, teams::Team& antagonists_) {
+    if (a.HP() <= 0) {
+      antagonists_.del(a.getName());
+      std::cout << a.getName() << " was found dead.\n";
+    }
+    if (p.HP() <= 0) {
+      protagonists_.del(p.getName());
+      std::cout << p.getName() << " was found dead.\n";
+    }
   }
 
   int Level::PlayLevel() {
@@ -35,8 +49,6 @@ namespace game {
         auto p = protagonists_.get();
         std::cout << "Current move is by your character " << p.getName()
                   << '\n';
-        std::cout << "Type in the name of the attack you want to do\n";
-        std::cin >> s;
         std::cout << "Type in the name of the opponent you want to attack\n";
         std::cin >> name;
         auto a = antagonists_.find(name);
@@ -226,14 +238,7 @@ namespace game {
             }
           }
         }
-        if (a.HP() <= 0) {
-          antagonists_.del(a.getName());
-          std::cout << a.getName() << " was found dead.\n";
-        }
-        if (p.HP() <= 0) {
-          protagonists_.del(p.getName());
-          std::cout << p.getName() << " was found dead.\n";
-        }
+        checkDeath(a, p, antagonists_, protagonists_);
         // Если противник умер
       }
       // ============================= ХОД ВРАГА ===============================
@@ -249,7 +254,7 @@ namespace game {
         // атаки
         pers_class::DiceRoll anta;
         pers_class::DiceRoll prota;
-        switch(a.RandomAttack()) {
+        switch (a.RandomAttack()) {
           case 0: // seduce
             anta = a.Seduce();
             if (s1 == "Ignore") {
@@ -371,16 +376,7 @@ namespace game {
             }
             break;
         }
-
-        if (a.HP() <= 0) {
-          antagonists_.del(a.getName());
-          std::cout << a.getName() << " was found dead.\n";
-        }
-        if (p.HP() <= 0) {
-          protagonists_.del(p.getName());
-          std::cout << p.getName() << " was found dead.\n";
-        }
-        // Если противник умер
+        checkDeath(a, p, antagonists_, protagonists_);
       }
     }
     if (antagonists_.size() == 0) {
@@ -392,25 +388,26 @@ namespace game {
     }
   }
 
-  Level Level::GenerateRandom(int difficulty, teams::Team protagonists, const IDataBase<PersonContainer>* antagonists_db) {
+  Level Level::GenerateRandom(int difficulty, teams::Team protagonists, const database::IDataBase<pers_class::PersonContainer>* antagonists_db) {
       difficulty = std::min(difficulty, kMaxDifficulty);
       int max_protagonists, max_antagonists;
       max_protagonists = kMaxProtagonistsOnLevel[difficulty];
       max_antagonists = kMaxAntagonistsOnLevel[difficulty];
       protagonists.updateMaxSize(max_protagonists);
       teams::Team antagonists(max_antagonists);
-      std::vector<PersonContainer> antagonist_list = antagonists_db->listAll();
+      std::vector<pers_class::PersonContainer> antagonist_list = antagonists_db->listAll();
       int count = antagonist_list.size();
       //srand(std::time(0));
       for (int i = 0; i < std::min(max_antagonists, count); ++i) {
           int select = rand() % antagonist_list.size();
-          antagonists.add(Person(antagonist_list[select]));
+          antagonists.add(pers_class::Person(antagonist_list[select]));
           antagonist_list.erase(antagonist_list.begin() + select);
       }
       return Level(difficulty, protagonists, antagonists);
   }
 
-  void Play(const IDataBase<PersonContainer>* protagonists_db, const IDataBase<PersonContainer>* antagonists_db) {
+  void Play(const database::IDataBase<pers_class::PersonContainer>* protagonists_db, const database::IDataBase<pers_class::PersonContainer>* antagonists_db)
+  {
       std::cout << "Please select the difficulty of the level (0-" << kMaxDifficulty << ")\n";
       int difficulty;
       std::cin >> difficulty;

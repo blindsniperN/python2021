@@ -77,3 +77,13 @@ const std::vector<int> kMaxAntagonistsOnLevel = {1, 1, 2};
 
 // путь к бд
 const std::string kPathToData = "database/filedatabase/data/";
+
+// ID для атак
+const int kIDSeduce = 000;
+const int kIDArgument = 001;
+const int kIDConvince = 002;
+const int kIDDeceive = 003;
+const int kIDMock = 004;
+// ID для защит
+const int kIDIgnore = 100;
+const int kIDChangeTheme = 101;
