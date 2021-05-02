@@ -95,7 +95,7 @@ namespace pers_class
     int RandomDefense();
     int RandomTool();
     // атака по вводу
-    DiceRoll AttackFromInput();
+    DiceRoll ActionFromInput(int&, std::string);
 
     // конструктор
     Person(const std::string& s, const stats_library::ParameterList& p,

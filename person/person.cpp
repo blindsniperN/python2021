@@ -229,10 +229,30 @@ namespace pers_class
   /*
   void Person::applyHint(); // намёк
   void Person::applyBribe(); // подкуп */
-  DiceRoll Person::AttackFromInput() {
-    std::string s;
-    std::cout << "Type in the name of the attack you want to do\n";
-    std::cin >> s;
+
+  DiceRoll Person::ActionFromInput(int& id, std::string s) {
+    if (s == "seduce") {
+      id = kIDSeduce;
+      return Seduce();
+    } else if (s == "argument") {
+      id = kIDArgument;
+      return MakeAnArgument();
+    } else if (s == "convince") {
+      id = kIDConvince;
+      return Convince();
+    } else if (s == "deceive") {
+      id = kIDDeceive;
+      return Deceive();
+    } else if (s == "mock") {
+      id = kIDMock;
+      return Mock();
+    } else if (s == "ignore") {
+      id = kIDIgnore;
+      return Ignore();
+    } else if (s == "changetheme") {
+      id = kIDChangeTheme;
+      return ChangeTheme();
+    }
   }
 }
 

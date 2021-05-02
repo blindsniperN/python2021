@@ -4,6 +4,7 @@
 #include "../person/person.h"
 #include <ctime>
 #include "../phrases/phrases.cpp"
+#include "../exceptions/exceptions.h"
 
 namespace game {
 
@@ -30,6 +31,45 @@ namespace game {
     }
   }
 
+  // применение эффектов
+  void ApplyEffects(int id, pers_class::Person& attacker,
+                    pers_class::Person& defender, short dmg, std::string s) {
+    std::cout << s << dmg << " points of damage.\n";
+    switch (id) {
+      case kIDSeduce:
+        defender.applySeduce(dmg);
+        break;
+      case kIDArgument:
+        defender.applyArgument(dmg);
+        break;
+      case kIDConvince:
+        defender.applyConvinceDefenser(dmg);
+        attacker.applyConvinceAttacker(dmg);
+        break;
+      case kIDDeceive:
+        defender.applyDeceiveDefenser(dmg);
+        attacker.applyDeceiveAttacker();
+        break;
+      case kIDMock:
+        defender.applyMockDefenser(dmg);
+        attacker.applyMockAttacker(dmg);
+        break;
+      case kIDIgnore:
+        attacker.applyIgnore(dmg);
+        break;
+      case kIDChangeTheme:
+        attacker.applyChangeTheme(dmg);
+        break;
+      default:
+        throw InvalidIDException();
+    }
+  }
+
+  void blankLines(int n) {
+    for (int i = 0; i < n; ++i) std::cout << '\n';
+  }
+
+
   int Level::PlayLevel() {
     for (size_t i = 0; i < antagonists_.size(); ++i) {
       auto a = antagonists_.get();
@@ -43,6 +83,10 @@ namespace game {
     while (protagonists_.size() != 0 and antagonists_.size() != 0) {
       print_team("Chanels", protagonists_);
       print_team("enemies", antagonists_); // вывести живых врагов
+
+      int prota_id = 0;
+      int anta_id = 0;
+
       // ============================ ХОД ИГРОКА =================================
       int size = protagonists_.size();
       for (size_t i = 0; i < size; ++i) {
@@ -52,331 +96,75 @@ namespace game {
         std::cout << "Type in the name of the opponent you want to attack\n";
         std::cin >> name;
         auto a = antagonists_.find(name);
+        // считываем атаку из входа
+        std::string s;
+        std::cout << "Type in the name of the attack you want to do\n";
+        std::cin >> s;
 
+        pers_class::DiceRoll prota = p.ActionFromInput(prota_id, s);
+        pers_class::DiceRoll anta;
+        std::cout << "You rolled " << prota.to_hit << " to hit.\n";
 
-        if (s == "seduce") { // если атака - соблазнение
-          pers_class::DiceRoll prota = p.Seduce();
-          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
-          int defense = a.RandomDefense();
-
-          if (defense == 0) { // если противник игнорирует
-            pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Ignore.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyIgnore(anta.dmg);
-
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applySeduce(prota.dmg);
-            }
-
-          } else { // если противник меняет тему
-            pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Change Theme.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyChangeTheme(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applySeduce(prota.dmg);
-            }
-          }
-
-
-        } else if (s == "argument") {
-          pers_class::DiceRoll prota = p.MakeAnArgument();
-          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
-          int defense = a.RandomDefense();
-          if (defense == 0) { // если противник игнорирует
-              pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Ignore.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyIgnore(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyArgument(prota.dmg);
-            }
-
-          } else { // если противник меняет тему
-            pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Change Theme.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyChangeTheme(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyArgument(prota.dmg);
-            }
-          }
-        } else if (s == "convince") {
-          pers_class::DiceRoll prota = p.Convince();
-          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
-          int defense = a.RandomDefense();
-
-          if (defense == 0) { // если противник игнорирует
-            pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Ignore.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyIgnore(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyConvinceDefenser(prota.dmg);
-              p.applyConvinceAttacker(prota.dmg);
-            }
-
-          } else { // если противник меняет тему
-            pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to ChangeTheme.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyChangeTheme(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyConvinceDefenser(prota.dmg);
-              p.applyConvinceAttacker(prota.dmg);
-            }
-          }
-        } else if (s == "deceive") {
-          pers_class::DiceRoll prota = p.Deceive();
-          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
-          int defense = a.RandomDefense();
-
-          if (defense == 0) { // если противник игнорирует
-            pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Ignore.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyIgnore(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyDeceiveDefenser(prota.dmg);
-              p.applyDeceiveAttacker();
-            }
-
-          } else {  // если противник меняет тему
-            pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Change Theme.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyChangeTheme(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyDeceiveDefenser(prota.dmg);
-              p.applyDeceiveAttacker();
-            }
-          }
-        } else if (s == "mock") {
-          pers_class::DiceRoll prota = p.Mock();
-          std::cout << "You rolled " << prota.to_hit << " to hit.\n";
-          int defense = a.RandomDefense();
-
-          if (defense == 0) { // если противник игнорирует
-            pers_class::DiceRoll anta = a.Ignore();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                                                    << " to Ignore.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyIgnore(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyMockDefenser(prota.dmg);
-              p.applyMockAttacker(prota.dmg);
-            }
-
-          } else { // если противник меняет тему
-            pers_class::DiceRoll anta = a.ChangeTheme();
-            std::cout << a.getName() << " rolled " << prota.to_hit + difficulty_
-                      << " to Change Theme.\n";
-            if (prota.to_hit <
-                anta.to_hit + difficulty_) { // если бросок провален
-              std::cout << "You failed to attack!\n";
-              std::cout << fail.generate() << '\n';
-              p.applyChangeTheme(anta.dmg);
-            } else { // если победа при броске
-              std::cout << "You managed to attack!\n";
-              std::cout << success.generate() << '\n';
-              a.applyMockDefenser(prota.dmg);
-              p.applyMockAttacker(prota.dmg);
-            }
-          }
+        // генерируем защиту
+        if (a.RandomDefense() == 0) { //
+          anta = a.Ignore();
+          anta_id = kIDIgnore;
+        } else {
+          anta = a.ChangeTheme();
+          anta_id = kIDChangeTheme;
         }
-        checkDeath(a, p, antagonists_, protagonists_);
+        anta.to_hit += difficulty_;
+        std::cout << a.getName() << " rolled " << anta.to_hit << " to defend.\n";
+
+        // проверяем, что мы победили
+        if (prota.to_hit >= anta.to_hit) {
+          std::cout << "You managed to attack!\n";
+          std::cout << success.generate() << '\n';
+          ApplyEffects(prota_id, p, a, prota.dmg, "You inflicted ");
+        } else {
+          std::cout << "You failed to attack!\n";
+          std::cout << fail.generate() << '\n';
+          ApplyEffects(anta_id, p, a, prota.dmg, a.getName() + " inflicted ");
+        }
+
         // Если противник умер
+        checkDeath(a, p, antagonists_, protagonists_);
+        blankLines(10);
       }
       // ============================= ХОД ВРАГА ===============================
-      std::cout << "It's the time for antagonists to shine!!!\n";
-      for (size_t i = 0; i < antagonists_.size(); ++i) {
-        auto a = antagonists_.get();
-        pers_class::Person p = protagonists_.getRandom();
-        std::cout << p.getName() << " is being attacked!\n";
-        std::cout << "Is she going to Ignore or ChangeTheme?\n";
-        std::string s1;
-        std::cin >> s1;
+      if (protagonists_.size() != 0) {
+        std::cout << "It's the time for antagonists to shine!!!\n";
+        for (size_t i = 0; i < antagonists_.size(); ++i) {
+          auto a = antagonists_.get();
+          pers_class::Person p = protagonists_.getRandom();
+          std::cout << p.getName() << " is being attacked!\n";
+          std::cout << "Is she going to Ignore or ChangeTheme?\n";
+          std::string s1;
+          std::cin >> s1;
 
-        // атаки
-        pers_class::DiceRoll anta;
-        pers_class::DiceRoll prota;
-        switch (a.RandomAttack()) {
-          case 0: // seduce
-            anta = a.Seduce();
-            if (s1 == "Ignore") {
-              prota = p.Ignore();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applySeduce(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to ignore your opponent!\n";
-                a.applyIgnore(prota.dmg);
-              }
-            } else {
-              prota = p.ChangeTheme();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applySeduce(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to change the topic of discussion!\n";
-                a.applyChangeTheme(prota.dmg);
-              }
-            }
-            break;
+          // атаки
+          pers_class::DiceRoll anta = a.ActionFromInput(anta_id,
+                                                        std::to_string(
+                                                                a.RandomAttack()));
+          anta.to_hit += difficulty_;
+          std::cout << a.getName() << " rolled " << anta.to_hit << " to hit.\n";
+          pers_class::DiceRoll prota = p.ActionFromInput(prota_id, s1);
+          std::cout << "You rolled " << prota.to_hit << " to defend.\n";
 
-          case 1: // MakeAnArgument
-            anta = a.MakeAnArgument();
-            if (s1 == "Ignore") {
-              prota = p.Ignore();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyArgument(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to ignore your opponent!\n";
-                a.applyIgnore(prota.dmg);
-              }
-            } else {
-              prota = p.ChangeTheme();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyArgument(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to change the topic of discussion!\n";
-                a.applyChangeTheme(prota.dmg);
-              }
-            }
-            break;
-
-          case 2: // Convince
-            anta = a.Convince();
-            if (s1 == "Ignore") {
-              prota = p.Ignore();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyConvinceDefenser(anta.dmg);
-                a.applyConvinceAttacker(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to ignore your opponent!\n";
-                a.applyIgnore(prota.dmg);
-              }
-            } else {
-              prota = p.ChangeTheme();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyConvinceDefenser(anta.dmg);
-                a.applyConvinceAttacker(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to change the topic of discussion!\n";
-                a.applyChangeTheme(prota.dmg);
-              }
-            }
-            break;
-
-          case 3: // Deceive
-            anta = a.Deceive();
-            if (s1 == "Ignore") {
-              prota = p.Ignore();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyDeceiveDefenser(anta.dmg);
-                a.applyDeceiveAttacker();
-              } else {   // противник не попал
-                std::cout << "You managed to ignore your opponent!\n";
-                a.applyIgnore(prota.dmg);
-              }
-            } else {
-              prota = p.ChangeTheme();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyDeceiveDefenser(anta.dmg);
-                a.applyDeceiveAttacker();
-              } else {   // противник не попал
-                std::cout << "You managed to change the topic of discussion!\n";
-                a.applyChangeTheme(prota.dmg);
-              }
-            }
-            break;
-
-          case 4: // Mock
-            anta = a.Mock();
-            if (s1 == "Ignore") {
-              prota = p.Ignore();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyMockDefenser(anta.dmg);
-                a.applyMockAttacker(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to ignore your opponent!\n";
-                a.applyIgnore(prota.dmg);
-              }
-            } else {
-              prota = p.ChangeTheme();
-              if (prota.to_hit < anta.to_hit + difficulty_) { // противник попал
-                std::cout << "You did not manage to outsmart your opponent!\n";
-                p.applyMockDefenser(anta.dmg);
-                a.applyMockAttacker(anta.dmg);
-              } else {   // противник не попал
-                std::cout << "You managed to change the topic of discussion!\n";
-                a.applyChangeTheme(prota.dmg);
-              }
-            }
-            break;
+          // проверяем, что мы победили
+          if (prota.to_hit >= anta.to_hit) {
+            std::cout << "You managed to defend!\n";
+            std::cout << fail.generate() << '\n';
+            ApplyEffects(prota_id, a, p, prota.dmg, "You inflicted ");
+          } else {
+            std::cout << "You failed to defend!\n";
+            std::cout << success.generate() << '\n';
+            ApplyEffects(anta_id, a, p, prota.dmg, a.getName() + " inflicted ");
+          }
+          // Если противник умер
+          checkDeath(a, p, antagonists_, protagonists_);
+          blankLines(10);
         }
-        checkDeath(a, p, antagonists_, protagonists_);
       }
     }
     if (antagonists_.size() == 0) {
