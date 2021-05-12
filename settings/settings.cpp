@@ -1,18 +1,10 @@
-#pragma once
+
 #include "settings.h"
-#include "person/game_mechanics.h"
-#include <vector>
-#include <iostream>
-#include "person/person.h"
-#include "exceptions/exceptions.h"
-using namespace stats_library;
-using namespace pers_class;
+#include "person.h"
 
-void print(const std::vector<PersonContainer>& v) {
-    for (int i = 0; i < v.size(); ++i) std::cout << v[i].getName() << '\n';
-}
+void Settings::Start()
+{
 
-void Settings::Start() {
     bool ok = true;
     while (ok) {
         std::cout << "Welcome to settings! Select what you would like to change:\n";
@@ -52,57 +44,26 @@ void Settings::Start() {
 
 }
 
+IDataBase<PersonContainer> * Settings::protagonists_= nullptr;
 
-std::vector<short> readVector(int count) {
-    std::vector<short> ans(count);
-    for (int i = 0; i < count; ++i)
-        std::cin >> ans[i];
-    return ans;
+IDataBase<PersonContainer> * Settings::antagonists_= nullptr;
+
+void Settings::showData(const pers_class::PersonContainer & person)
+{
+
+    std::cout << "Character data\n";
+    std::cout << "Name: " << person.getName() << '\n';
+    std::cout << "Parameters: " << person.parameters_.toString() << "(Charm, Cunning, Intelligence, Will)\n";
+    std::cout << "Skills: " << person.skills_.toString() << "(Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion)\n";
+    std::cout << "Attack probabilities: " << person.att_prob_.toString() << "(Seduce, Make An Argument, Convince, Deceive, Mock)\n";
+    std::cout << "Defense probabilities: " << person.def_prob_.toString() << "(Ignore, Change Theme, Counterargument)\n";
+    std::cout << "Tools probabilities: " << person.tool_prob_.toString() << "(Love, Research, Hint, Bribe)\n";
 }
 
-int sum(const std::vector<short>& v) {
-    int s = 0;
-    for (auto i: v) s += i;
-    return s;
-}
+template<bool IsProtagonist>
+void Settings::CreatePerson()
+{
 
-std::vector<short> readVectorWithBoundary(int count, int boundary) {
-    std::vector<short> data(count, 0);
-
-    while (sum(data) == 0 || sum(data) > boundary) {
-        for (int i = 0; i < count; ++i)
-            std::cin >> data[i];
-
-        if (sum(data) > boundary)
-            std::cout << "You have exceeded the maximum amount possible (" + std::to_string(sum(data)) + ">" + std::to_string(boundary) + "). Reduce it.\n";
-        else if (sum(data) < boundary) {
-            std::cout << "You have unused points left over (" + std::to_string(boundary - sum(data)) + "). Are you sure you don't want to use them?\n";
-            std::cout << "1. Change my choice\n";
-            std::cout << "2. Leave it as it is\n";
-            int choice;
-            std::cin >> choice;
-            if (choice == 1)
-                data[0] = boundary + 1; // превышаем количество, чтобы пошло на еще одну итерацию
-        }
-    }
-    return data;
-}
-void tryAdding(IDataBase<PersonContainer>*& db, PersonContainer& person) {
-    bool ok = false;
-    while (!ok)
-        try {
-            db->add(person);
-            std::cout << "The character has been successfully added to the database!\n";
-            ok = true;
-        } catch (AlreadyExists) {
-            std::cout << "Oops... Turns out a character with that name already exists. Please enter another name.\n";
-            std::string name;
-            std::cin >> name;
-            person.setName(name);
-        }
-}
-template <bool IsProtagonist>
-void Settings::CreatePerson() {
     int parameter_boundary, skill_boundary;
     IDataBase<PersonContainer>* db;
     if (IsProtagonist) {
@@ -149,17 +110,11 @@ void Settings::CreatePerson() {
     tryAdding(db, new_person);
 }
 
-void Settings::showData(const PersonContainer& person) {
-    std::cout << "Character data\n";
-    std::cout << "Name: " << person.getName() << '\n';
-    std::cout << "Parameters: " << person.parameters_.toString() << "(Charm, Cunning, Intelligence, Will)\n";
-    std::cout << "Skills: " << person.skills_.toString() << "(Etiquette, People Understanding, Deception, Gambling, Leadership, Charisma, Persuasion, Seduction, Intimidation, Resistance to Persuasion)\n";
-    std::cout << "Attack probabilities: " << person.att_prob_.toString() << "(Seduce, Make An Argument, Convince, Deceive, Mock)\n";
-    std::cout << "Defense probabilities: " << person.def_prob_.toString() << "(Ignore, Change Theme, Counterargument)\n";
-    std::cout << "Tools probabilities: " << person.tool_prob_.toString() << "(Love, Research, Hint, Bribe)\n";
-}
-template <bool IsProtagonist>
-void Settings::UpdatePerson() {
+// true - protagonist, false - antagonist
+template<bool IsProtagonist>
+void Settings::UpdatePerson()
+{
+
     IDataBase<PersonContainer>* db;
     int parameter_boundary, skill_boundary;
     if (IsProtagonist) {
@@ -253,8 +208,10 @@ void Settings::UpdatePerson() {
     tryAdding(db, person);
 }
 
-template <bool IsProtagonist>
-void Settings::DeletePerson() {
+template<bool IsProtagonist>
+void Settings::DeletePerson()
+{
+
     IDataBase<PersonContainer>* db;
     if (IsProtagonist) {
         db = protagonists_;
@@ -275,3 +232,4 @@ void Settings::DeletePerson() {
         }
     }
 }
+

@@ -1,21 +1,3 @@
-#pragma once
-#include <iostream>
-#include "database/filedatabase/filedatabase.cpp"
-#include "person/person.cpp"
-#include "person/factories.h"
-#include <vector>
-#include "exceptions/exceptions.h"
-#include "person/teams.cpp"
-#include "settings/settings.cpp"
-#include "game/game.cpp"
-#include <ctime>
-using namespace teams;
-using namespace database;
-using namespace pers_class;
-using namespace game;
-void Help() {
-    std::cout << "Very informative help\n";
-}
 int main() {
     srand(std::time(0));
     IDataBase<PersonContainer>* protagonists = new FileDataBase<PersonContainer>(kProtagonistsTableName);

@@ -1,19 +1,27 @@
-#pragma once
-#include <vector>
-#include "../person/teams.cpp"
-#include "../phrases/phrases.cpp"
-#include "../database/database.h"
+#ifndef GAME_GAME_H
+#define GAME_GAME_H
+
+
+#include "teams.h"
 
 namespace game {
 
-  class Level {
-   private:
-    int difficulty_; // сложность
-    teams::Team protagonists_; // протагонисты (шанели)
-    teams::Team antagonists_; // антагонисты (противники)
-   public:
-    Level(int a, teams::Team b, teams::Team c): difficulty_(a), protagonists_(b),
-                                                antagonists_(c) { }
+class Level {
+  private:
+    // сложность
+    int difficulty_;
+
+    // протагонисты (шанели)
+    teams::Team protagonists_;
+
+    // антагонисты (противники)
+    teams::Team antagonists_;
+
+
+  public:
+    inline Level(int a, teams::Team b, teams::Team c) : difficulty_(a), protagonists_(b),
+                                                    antagonists_(c) { };
+
     ~Level() = default;
 
     // 0 - пользователь вышел совсем, 1 - пользователь проиграл, 2 - выиграл
@@ -21,8 +29,9 @@ namespace game {
     // количество очков за разные штуки
     int PlayLevel();
 
-    static Level GenerateRandom(int, teams::Team,
-                                const database::IDataBase<pers_class::PersonContainer>*);
-  };
+    static Level GenerateRandom(int difficulty, teams::Team protagonists, const database::IDataBase<pers_class::PersonContainer> * antagonists_db);
 
-}
+};
+
+} // namespace game
+#endif

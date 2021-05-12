@@ -1,76 +1,13 @@
+
 #include "game.h"
-#include <string>
-#include "../database/database.h"
-#include "../person/person.h"
-#include <ctime>
-#include "../phrases/phrases.cpp"
-#include "../exceptions/exceptions.h"
 
 namespace game {
 
-  // вывести тиму на экран
-  void print_team(const std::string& s, teams::Team& team1) {
-    std::string s1;
-    for (size_t i = 0; i < team1.size(); ++i) { // вывести живых шанелей
-      s1 += team1.get().getName();
-      if (i != team1.size() - 1) s1 += ", ";
-    }
-    std::cout << "Remaining " << s << " are: " << s1 << '\n';
-  }
+// 0 - пользователь вышел совсем, 1 - пользователь проиграл, 2 - выиграл
+// также тут можно немного настроить, если есть желание выдавать разное
+// количество очков за разные штуки
+int Level::PlayLevel() {
 
-  // проверить на смерть
-  void checkDeath(pers_class::Person& a, pers_class::Person& p,
-                  teams::Team& protagonists_, teams::Team& antagonists_) {
-    if (a.HP() <= 0) {
-      antagonists_.del(a.getName());
-      std::cout << a.getName() << " was found dead.\n";
-    }
-    if (p.HP() <= 0) {
-      protagonists_.del(p.getName());
-      std::cout << p.getName() << " was found dead.\n";
-    }
-  }
-
-  // применение эффектов
-  void ApplyEffects(int id, pers_class::Person& attacker,
-                    pers_class::Person& defender, short dmg, std::string s) {
-    std::cout << s << dmg << " points of damage.\n";
-    switch (id) {
-      case kIDSeduce:
-        defender.applySeduce(dmg);
-        break;
-      case kIDArgument:
-        defender.applyArgument(dmg);
-        break;
-      case kIDConvince:
-        defender.applyConvinceDefenser(dmg);
-        attacker.applyConvinceAttacker(dmg);
-        break;
-      case kIDDeceive:
-        defender.applyDeceiveDefenser(dmg);
-        attacker.applyDeceiveAttacker();
-        break;
-      case kIDMock:
-        defender.applyMockDefenser(dmg);
-        attacker.applyMockAttacker(dmg);
-        break;
-      case kIDIgnore:
-        attacker.applyIgnore(dmg);
-        break;
-      case kIDChangeTheme:
-        attacker.applyChangeTheme(dmg);
-        break;
-      default:
-        throw InvalidIDException();
-    }
-  }
-
-  void blankLines(int n) {
-    for (int i = 0; i < n; ++i) std::cout << '\n';
-  }
-
-
-  int Level::PlayLevel() {
     for (size_t i = 0; i < antagonists_.size(); ++i) {
       auto a = antagonists_.get();
       a.HP() += 5 * difficulty_; // дописать увеличение здоровья
@@ -174,9 +111,11 @@ namespace game {
       std::cout << "YOU LOSE!\n";
       return 1;
     }
-  }
+}
 
-  Level Level::GenerateRandom(int difficulty, teams::Team protagonists, const database::IDataBase<pers_class::PersonContainer>* antagonists_db) {
+Level Level::GenerateRandom(int difficulty, teams::Team protagonists, const database::IDataBase<pers_class::PersonContainer> * antagonists_db)
+{
+
       difficulty = std::min(difficulty, kMaxDifficulty);
       int max_protagonists, max_antagonists;
       max_protagonists = kMaxProtagonistsOnLevel[difficulty];
@@ -192,17 +131,7 @@ namespace game {
           antagonist_list.erase(antagonist_list.begin() + select);
       }
       return Level(difficulty, protagonists, antagonists);
-  }
-
-  void Play(const database::IDataBase<pers_class::PersonContainer>* protagonists_db, const database::IDataBase<pers_class::PersonContainer>* antagonists_db)
-  {
-      std::cout << "Please select the difficulty of the level (0-" << kMaxDifficulty << ")\n";
-      int difficulty;
-      std::cin >> difficulty;
-      difficulty = std::min(kMaxDifficulty, std::max(0, difficulty)); // откидываем неправильные данные
-      teams::Team protagonists = teams::Team::FormTeam(kMaxProtagonistsOnLevel[difficulty], protagonists_db);
-      Level level = Level::GenerateRandom(difficulty, protagonists, antagonists_db);
-      int result = level.PlayLevel();
-      // do smth with result?
-  }
 }
+
+
+} // namespace game

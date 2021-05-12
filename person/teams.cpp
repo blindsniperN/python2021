@@ -1,19 +1,11 @@
-#pragma once
-#include "person.h"
-#include "../stats/stats.cpp"
-#include <string>
-#include <vector>
-#include "teams.h"
-#include <algorithm>
-#include <random>
-#include "../exceptions/exceptions.h"
-#include "database/database.h"
-#include <iostream>
-#include <ctime>
-namespace teams
-{
 
-    Team::Team(int max_size, const std::vector<Person>& people = {}): members_(people), size_(people.size()), max_size_(max_size) {
+#include "teams.h"
+#include "database.h"
+
+namespace teams {
+
+ Team::Team(int max_size, const std::vector<Person> & people) {
+
         if (members_.size() > max_size_) {
             members_.resize(max_size_);
             size_ = max_size_;
@@ -21,16 +13,10 @@ namespace teams
             throw TooManyPeopleException();
         }
         shuffle();
-    }
+}
 
-    void Team::createTeam() { return; }
+void Team::add(const pers_class::Person & person) {
 
-    void Team::shuffle() {
-        auto rng = std::default_random_engine {};
-        std::shuffle(std::begin(members_), std::end(members_), rng);
-    }
-
-    void Team::add(Person person) {
         //srand(std::time(0));
         if (size_ < max_size_) {
             auto it = members_.begin() + ((size_ != 0) ? rand() % (size_ + 1) : 0); // Todo мб поставить другой рандом
@@ -39,27 +25,32 @@ namespace teams
         } else {
             throw TooManyPeopleException();
         }
-    }
+}
 
-    Person& Team::get() {
+pers_class::Person Team::get() {
+
         int index = current_attacker_;
         current_attacker_ = (current_attacker_ + 1) % size_;
         return members_[index];
-    }
+}
 
-    Person& Team::getRandom() {
+pers_class::Person Team::getRandom() {
+
         int index = rand() % size_;
         return members_[index];
-    }
+}
 
-    Person& Team::find(const std::string& name) {
+//        void apply(object)
+pers_class::Person Team::find(const std::string & name) {
+
         for (Person& p: members_) {
             if (p.getName() == name) return p;
         }
         throw NotFound();
-    }
+}
 
-    void Team::del(const std::string& name) {
+void Team::del(const std::string & name) {
+
         for (auto it = members_.begin(); it != members_.end(); ++it) {
             if (it->getName() == name) {
                 members_.erase(it);
@@ -68,20 +59,20 @@ namespace teams
             }
         }
         throw NotFound();
-    }
+}
 
-    void Team::updateMaxSize(int new_max_size) {
+void Team::updateMaxSize(int new_max_size) {
+
         max_size_ = new_max_size;
         if (size_ > max_size_) {
             size_ = max_size_;
             members_.resize(size_);
         }
-    }
-    void print(const std::vector<PersonContainer>& v) {
-        for (int i = 0; i < v.size(); ++i) std::cout << v[i].getName() << '\n';
-    }
+}
 
-    Team Team::FormTeam(int max_size, const IDataBase<PersonContainer>* protagonists_db) {
+Team Team::FormTeam(int max_size, const IDataBase<PersonContainer> & protagonists_db)
+{
+
         Team new_team(max_size);
         std::cout << "Now you need to form a team! Due to the chosen difficulty, its maximum size shouldn't exceed " << max_size << " characters\n";
         std::cout << "Select characters from the following list (they shouldn't dublicate)\n";
@@ -103,6 +94,17 @@ namespace teams
             }
         }
         return new_team;
-    }
 }
 
+void Team::createTeam() {
+ return;
+}
+
+void Team::shuffle() {
+
+        auto rng = std::default_random_engine {};
+        std::shuffle(std::begin(members_), std::end(members_), rng);
+}
+
+
+} // namespace teams

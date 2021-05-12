@@ -1,37 +1,53 @@
-#pragma once
-#include "../stats/stats.cpp"
+#ifndef TEAMS_TEAMS_H
+#define TEAMS_TEAMS_H
+
+
 #include "person.h"
-#include <string>
-#include <vector>
-#include <iostream>
-namespace teams
-{
-    using namespace pers_class;
 
-    class Team {
-    public:
-        Team(int, const std::vector<Person>&);
-        void add(Person);
+namespace database { template<typename T> class IDataBase; } 
+namespace pers_class { class PersonContainer; } 
 
-        Person& get();
-        Person& getRandom();
-//        void apply(object)
-        Person& find(const std::string&);
-        void del(const std::string&);
-        void updateMaxSize(int);
-        size_t size() const { return size_; }
+namespace teams {
 
-        static Team FormTeam(int, const IDataBase<PersonContainer>*);
-    private:
-        std::vector<Person> members_;
-        int max_size_;
-        int size_ = 0;
-        int current_attacker_ = 0;
+class Team {
+  public:
+     Team(int max_size, const std::vector<Person> & people);
 
-        template<typename... Args>
-        void createTeam(Person, Args...);
-        void createTeam();
-        void shuffle();
-    };
+    void add(const pers_class::Person & person);
 
+    pers_class::Person get();
+
+    pers_class::Person getRandom();
+
+    //        void apply(object)
+    pers_class::Person find(const std::string & name);
+
+    void del(const std::string & name);
+
+    void updateMaxSize(int new_max_size);
+
+    inline size_t size() const;
+
+    static Team FormTeam(int max_size, const IDataBase<PersonContainer> & protagonists_db);
+
+
+  private:
+    pers_class::Person members_;
+
+    int max_size_;
+
+    int size_=  0;
+
+    int current_attacker_=  0;
+
+    void createTeam();
+
+    void shuffle();
+
+};
+inline size_t Team::size() const {
 }
+
+
+} // namespace teams
+#endif
