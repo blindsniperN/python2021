@@ -2,6 +2,8 @@
 #include "person.h"
 #include <string>
 #include <vector>
+#include <iostream>
+#include "auxiliary/parse_string.h"
 namespace pers_class
 {
     using namespace stats_library;
@@ -36,7 +38,7 @@ namespace pers_class
     DiceRoll ans;
     ans.to_hit = 1 + rand() % kHitDice + skills_.leadership_.Roll()
             + love_modifier_;
-    ans.dmg = 1 + rand() % kArgumentDmgDice + parameters_.charm_.value_;
+    ans.dmg = 1 + rand() % kArgumentDmgDice + parameters_.cunning_.value_;
     return ans;
   }
 
@@ -52,7 +54,7 @@ namespace pers_class
     DiceRoll ans;
     ans.to_hit = std::max(1 + rand() % kHitDice +
             skills_.deception_.Roll() - deceive_to_hit_ + love_modifier_, 0);
-    ans.dmg = 1 + rand() % kDeceiveDmgDice + parameters_.intelligence_.value_;
+    ans.dmg = 1 + rand() % kDeceiveDmgDice + parameters_.cunning_.value_;
     return ans;
   }
 
@@ -128,20 +130,20 @@ namespace pers_class
   }
 
 
-    std::string popFirst(std::string& data) {
-        std::string answer = data.substr(0, data.find(';'));
-        data = data.substr(data.find(';') + 2, data.size());
-        return answer;
-    }
-
-
-    std::vector<short> popVector(std::string& data, int length) {
-        std::vector<short> array(length);
-        for (int i = 0; i < length; ++i) {
-            array[i] = std::stoi(popFirst(data));
-        }
-        return array;
-    }
+//    std::string popFirst(std::string& data) {
+//        std::string answer = data.substr(0, data.find(';'));
+//        data = data.substr(data.find(';') + 2, data.size());
+//        return answer;
+//    }
+//
+//
+//    std::vector<short> popVector(std::string& data, int length) {
+//        std::vector<short> array(length);
+//        for (int i = 0; i < length; ++i) {
+//            array[i] = std::stoi(popFirst(data));
+//        }
+//        return array;
+//    }
   PersonContainer::PersonContainer(std::string data):     name_(popFirst(data)), parameters_(popVector(data, ParameterList::parameter_count_)),
                                         skills_(parameters_, popVector(data, SkillList::skill_count_)),
                                         att_prob_(popVector(data, kAttackAmount)), def_prob_(popVector(data, kDefenseAmount)),
@@ -228,5 +230,29 @@ namespace pers_class
   void Person::applyHint(); // намёк
   void Person::applyBribe(); // подкуп */
 
+  DiceRoll Person::ActionFromInput(int& id, std::string s) {
+    if (s == "seduce") {
+      id = kIDSeduce;
+      return Seduce();
+    } else if (s == "argument") {
+      id = kIDArgument;
+      return MakeAnArgument();
+    } else if (s == "convince") {
+      id = kIDConvince;
+      return Convince();
+    } else if (s == "deceive") {
+      id = kIDDeceive;
+      return Deceive();
+    } else if (s == "mock") {
+      id = kIDMock;
+      return Mock();
+    } else if (s == "ignore") {
+      id = kIDIgnore;
+      return Ignore();
+    } else if (s == "changetheme") {
+      id = kIDChangeTheme;
+      return ChangeTheme();
+    }
+  }
 }
 

@@ -13,10 +13,15 @@ namespace teams
         Team(int, const std::vector<Person>&);
         void add(Person);
 
-        Person get();
+        Person& get();
+        Person& getRandom();
 //        void apply(object)
-        Person find(const std::string&);
-        size_t size() { return size_; }
+        Person& find(const std::string&);
+        void del(const std::string&);
+        void updateMaxSize(int);
+        size_t size() const { return size_; }
+
+        static Team FormTeam(int, const IDataBase<PersonContainer>*);
     private:
         std::vector<Person> members_;
         int max_size_;
